@@ -1,0 +1,1 @@
+// search about joi and study it  then make your own schema for each endpoint
