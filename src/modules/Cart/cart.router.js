@@ -1,3 +1,7 @@
+const cartRouter = () => {
+
+};
+
 
 // destruct the Router from express and make your own routers
 
@@ -11,3 +15,5 @@
 // remove all products from cart
 
 // get cart data
+
+export default cartRouter;

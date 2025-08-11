@@ -1,4 +1,10 @@
+const userRouter = () => {
+  
 
+  
+};
+
+export default userRouter;
 // destruct the Router from express and make your own routers
 
 
