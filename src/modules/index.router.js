@@ -18,11 +18,11 @@ const bootstrap = (app, express) => {
     }
   });
 
-  // Setup cors
+  // // Setup cors
 
   app.use(cors());
 
-  // morgan check error
+  // // morgan check error
 
   if (process.env.MOOD == "DEV") {
     app.use(morgan("dev"));
@@ -30,19 +30,21 @@ const bootstrap = (app, express) => {
     app.use(morgan("combined"));
   }
 
-  // axios.post("baseUrl/subcategory/subCategoryByCategoryId/cvyuka",)
+  // // axios.post("baseUrl/subcategory/subCategoryByCategoryId/cvyuka",)
 
-  // Setup api routing
+  // // Setup api routing
   app.use(`/auth`, authRouter);
   app.use(`/user`, userRouter);
   app.use(`/product`, productRouter);
   app.use(`/cart`, cartRouter);
   app.use(`/order`, orderRouter);
 
-  app.use("*", (req, res) => {
-    res.status(404).json({ message: "In-valid routing" });
+  app.use((req, res,next) => {
+   return res.status(404).json({ message: "In-valid routing" });
   });
-  // Error handling
+
+
+  // // Error handling
   app.use(globalError);
   // Connection DB
 };

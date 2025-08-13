@@ -1,27 +1,60 @@
-const userRouter = () => {
-  
+import { auth } from "../../middleware/auth.js";
+import * as validators from "./user.validation.js";
+import * as userController from "./controller/user.js";
+import { Router } from "express";
+import endPoint from "./user.endPoints.js";
+import { fileValidation, myMulter } from "../../utils/multer.js";
+import validation from "../../middleware/validation.js";
+const router = Router();
 
-  
-};
+// router.patch(
+//   "/profilePic",
+//   myMulter(fileValidation.image).single("image"),
+//   validation(validators.profilePic),
+//   auth(endPoint.allUsers),
+//   userController.profilePic
+// );
+// router.patch(
+//   "/deleteProfilePic",
+//   validation(validators.token),
+//   auth(endPoint.allUsers),
+//   userController.deleteProfilePic
+// );
+router.put(
+  "/",
+  validation(validators.updateUser),
+  auth(endPoint.allUsers),
+  userController.updateUser
+);
+router.patch(
+  "/updatePassword",
+  validation(validators.updatePassword),
+  auth(endPoint.allUsers),
+  userController.updatePassword
+);
+router.patch(
+  "/softDelete",
+  validation(validators.token),
+  auth(endPoint.allUsers),
+  userController.softDelete
+);
+// router.patch(
+//   "/:id/blockUser",
+//   validation(validators.blockUser),
+//   auth(endPoint.blockUser),
+//   userController.blockUser
+// );
+router.get(
+  "/profile",
+  validation(validators.token),
+  auth(endPoint.allUsers),
+  userController.profile
+);
+router.get(
+  "/:id",
+  validation(validators.getUserById),
+  userController.getUserById
+);
+router.get("/",  validation(validators.token), auth(endPoint.users), userController.users);
 
-export default userRouter;
-// destruct the Router from express and make your own routers
-
-
-// update User
-
-// add and update profile Pic
-
-// delete Profile Pic
-
-// update Password
-
-// softDelete
-
-// block User
-
-// return profile data
-
-// return User By Id
-
-// return all users for admin
+export default router;
