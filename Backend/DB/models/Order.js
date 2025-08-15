@@ -50,7 +50,7 @@ const orderSchema = new Schema(
         "placed",
         "received",
         "rejected",
-        "cenceled",
+        "canceled",
         "onWay",
         "waitPayment",
       ],
