@@ -1,3 +1,199 @@
+// import slugify from "slugify";
+// import productModel from "../../../../DB/models/Product.js";
+
+// // Create Product
+// export const createProduct = async (req, res, next) => {
+//     try {
+//         const { customId, name, price, description, stock } = req.body;
+
+//         // عمل slug من الاسم
+//         req.body.slug = slugify(name, {
+//             replacement: '-',
+//             trim: true,
+//             lower: true
+//         });
+
+//         // إضافة الصورة من multer
+//         if (req.file) {
+//             req.body.image = {
+//                 secure_url: `/uploads/${req.file.filename}`, // أو لينك Cloudinary
+//                 public_id: req.file.filename
+//             };
+//         }
+
+//         const product = await productModel.create(req.body);
+//         res.status(201).json({ message: "Product created successfully", product });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+// // Update Product
+// export const updateProduct = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+//         if (req.body.name) {
+//             req.body.slug = slugify(req.body.name, {
+//                 replacement: '-',
+//                 trim: true,
+//                 lower: true
+//             });
+//         }
+
+//         const updatedProduct = await productModel.findByIdAndUpdate(id, req.body, { new: true });
+//         if (!updatedProduct) return res.status(404).json({ message: "Product not found" });
+
+//         res.json({ message: "Product updated successfully", updatedProduct });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+// // Delete Product (hard delete)
+// export const deleteProduct = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+//         const deletedProduct = await productModel.findByIdAndDelete(id);
+//         if (!deletedProduct) return res.status(404).json({ message: "Product not found" });
+
+//         res.json({ message: "Product deleted successfully" });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+// // Return all products
+// export const getAllProducts = async (req, res, next) => {
+//     try {
+//         const products = await productModel.find({ isDeleted: { $ne: true } });
+//         res.json({ products });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+// // Return Products for admin
+// export const getAllProductsAdmin = async (req, res, next) => {
+//     try {
+//         const products = await productModel.find();
+//         res.json({ products });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+// // Return Product By Id
+// export const getProductById = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+//         const product = await productModel.findById(id);
+//         if (!product) return res.status(404).json({ message: "Product not found" });
+
+//         res.json({ product });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+
+
+
+import slugify from "slugify";
+import productModel from "../../../../DB/models/Product.js";
+
+// Create Product
+export const createProduct = async (req, res, next) => {
+    try {
+        const { name, price, description, stock } = req.body;
+
+        if (!name) {
+            return res.status(400).json({ message: "Product name is required" });
+        }
+
+        req.body.slug = slugify(name, { replacement: '-', trim: true, lower: true });
+
+        if (req.file) {
+            req.body.image = {
+                secure_url: `/uploads/${req.file.filename}`,
+                public_id: req.file.filename
+            };
+        }
+
+        const product = await productModel.create(req.body);
+        res.status(201).json({ message: "Product created successfully", product });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Update Product
+export const updateProduct = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({ message: "No update data provided" });
+        }
+
+        if (req.body.name) {
+            req.body.slug = slugify(req.body.name, { replacement: '-', trim: true, lower: true });
+        }
+
+        const updatedProduct = await productModel.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedProduct) return res.status(404).json({ message: "Product not found" });
+
+        res.json({ message: "Product updated successfully", updatedProduct });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Delete Product
+export const deleteProduct = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const deletedProduct = await productModel.findByIdAndDelete(id);
+        if (!deletedProduct) return res.status(404).json({ message: "Product not found" });
+
+        res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get all products
+export const getAllProducts = async (req, res, next) => {
+    try {
+        const products = await productModel.find({ isDeleted: { $ne: true } });
+        res.json({ products });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get all products (admin)
+export const getAllProductsAdmin = async (req, res, next) => {
+    try {
+        const products = await productModel.find();
+        res.json({ products });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get product by id
+export const getProductById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await productModel.findById(id);
+        if (!product) return res.status(404).json({ message: "Product not found" });
+
+        res.json({ product });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 
 // create Product

@@ -1,10 +1,29 @@
-const productRouter = () => {
-  
+import * as productController from './controller/product.js';
+import { myMulter, fileValidation } from '../../utils/multer.js';
+import { Router } from "express";
 
-  
-};
+const router = Router();
 
-export default productRouter;
+// Create Product
+router.post("/", myMulter(fileValidation.image).single("image"), productController.createProduct);
+
+// Update Product
+router.put("/:id", productController.updateProduct);
+
+// Delete Product
+router.delete("/:id", productController.deleteProduct);
+
+// Get all products
+router.get("/", productController.getAllProducts);
+
+// Get all products for admin
+router.get("/admin", productController.getAllProductsAdmin);
+
+// Get product by id
+router.get("/:id", productController.getProductById);
+
+export default router;
+
 // destruct the Router from express and make your own routers
 
 
