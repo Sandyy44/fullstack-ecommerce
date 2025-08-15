@@ -1,6 +1,8 @@
 import { roles } from "../../middleware/auth.js";
 
-const endPoint = {
-  cart: [roles.User],
+export const endPoint = {
+  create: [roles.User,roles.Admin],
+  deleteProduct: [roles.User,roles.Admin],
+  deleteAll:[roles.Admin,roles.Admin],
+  get: [roles.User,roles.Admin],
 };
-export default endPoint;

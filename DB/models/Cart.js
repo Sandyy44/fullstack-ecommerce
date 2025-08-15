@@ -8,14 +8,19 @@ const cartSchema = new Schema(
       unique: [true, "only one cart for each user"],
       required: [true, "userId is required"],
     },
-    products: {
-      type: [Types.ObjectId],
-      ref:"productCart"
-    },
-    finalPrice:Number
+    products: [{
+      _id:{
+      type: Types.ObjectId,
+      ref: "productCart"
+      },
+      quantity: {
+      type: Number
+    }
+}],
+finalPrice: Number
   },
-  {
-    timestamps: true,
+{
+  timestamps: true,
   }
 );
 const cartModel = model("Cart", cartSchema);

@@ -7,6 +7,10 @@ const orderSchema = new Schema(
       ref: "User",
       required: [true, "userId is required"],
     },
+    updatedBy: {
+      type: Types.ObjectId,
+      ref: "User"
+    },
     products: {
       type: [
         {
@@ -17,7 +21,6 @@ const orderSchema = new Schema(
           productId: {
             type: Types.ObjectId,
             ref: "Product",
-            required: [true, "Quantity is required"],
           },
           quantity: { type: Number, required: [true, "Quantity is required"] },
           unitePrice: {
@@ -34,10 +37,7 @@ const orderSchema = new Schema(
     },
     address: { type: String, required: [true, "address is required"] },
     phone: { type: String, required: [true, "phone is required"] },
-    subtotalPrice: {
-      type: Number,
-      default: 1,
-    },
+  
     finalPrice: {
       type: Number,
       default: 1,
@@ -55,7 +55,7 @@ const orderSchema = new Schema(
         "waitPayment",
       ],
     },
-    reson: String,
+    reason: String,
     paymentMethod: {
       type: String,
       default: "cash",
