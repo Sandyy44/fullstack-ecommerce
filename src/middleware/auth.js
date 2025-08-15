@@ -6,7 +6,6 @@ import { verifyToken } from "../utils/GenerateAndVerifyToken.js";
 export const roles = {
   User: "User",
   Admin: "Admin",
-  Vendor: "Vendor",
 };
 
 export const auth = (accessRoles = []) => {
@@ -20,17 +19,17 @@ export const auth = (accessRoles = []) => {
       token,
       signature: process.env.TOKINSEGNITURE,
     });
+
+    
     if (!decoded?.id) {
       return next(new Error("In-valid token payload", { cause: 400 }));
     }
     const user = await findById({
       model: userModel,
       condition: decoded.id,
-      populate: [{
-        path: "wishList"
-      }],
       select: "-password",
     });
+    
     if (!user) {
       return next(new Error("In-valid user", { cause: 404 }));
     }

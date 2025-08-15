@@ -29,8 +29,7 @@ export const remove = asyncHandler(async (req, res, next) => {
   if (user.deleted) {
     return next(new Error("Your account is stopped", { cause: 400 }));
   }
-  console.log(user.wishList.map((product) => product._id));
-  if (!user.wishList.map((product) => product._id.toString()).includes(productId)) {
+  if (!user.wishList.includes(productId)) {
     return next(
       new Error("Already, In-valid this product ID in your wishList", { cause: 404 })
     );

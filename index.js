@@ -1,16 +1,20 @@
 import express from "express";
+import "./src/utils/passportSetup.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import bootstrap from "./src/modules/index.router.js";
 import connectDB from "./DB/Conniction.js";
 import productRouter from "./src/modules/Product/product.router.js";
 
+// Set directory direname
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, "./config/.env") });
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Middlewares for parsing requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -19,6 +23,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/product", productRouter);
+bootstrap(app, express);
 
 // DB connection
 connectDB();
