@@ -113,10 +113,8 @@ export const createProduct = async (req, res, next) => {
         req.body.slug = slugify(name, { replacement: '-', trim: true, lower: true });
 
         if (req.file) {
-            req.body.image = {
-                secure_url: `/uploads/${req.file.filename}`,
-                public_id: req.file.filename
-            };
+            user.image.secure_url = req.file.finalDest
+            user.image.public_id = req.file.path
         }
 
         const product = await productModel.create(req.body);

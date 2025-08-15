@@ -1,11 +1,11 @@
 import * as productController from './controller/product.js';
-import { myMulter, fileValidation } from '../../utils/multer.js';
+import {  fileValidation, fileUpload } from '../../utils/multer.js';
 import { Router } from "express";
 
 const router = Router();
 
 // Create Product
-router.post("/", myMulter(fileValidation.image).single("image"), productController.createProduct);
+router.post("/",fileUpload("product/", fileValidation.image).single("image"), productController.createProduct);
 
 // Update Product
 router.put("/:id", productController.updateProduct);

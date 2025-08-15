@@ -15,21 +15,23 @@ import { generateToken } from "../../../utils/GenerateAndVerifyToken.js";
 import sendEmail from "../../../utils/sendEmail.js";
 import { decrypt, encrypt } from "../../../utils/encryptAndDecrypt.js";
 import productModel from "../../../../DB/models/Product.js";
+import { deleteFile } from "../../../utils/multer.js";
 export const profilePic = asyncHandler(async (req, res, next) => {
   const { user } = req;
   if (user.deleted) {
     return next(new Error("You deleted your profile", { cause: 400 }));
   }
-  const { public_id, secure_url } = await cloudinary.uploader.upload(
-    req.file.path,
-    {
-      folder: `${process.env.PROJECTNAME}/user/profilePic/${user._id}`,
-    }
-  );
-  if (user.image) {
-    await cloudinary.uploader.destroy(user.image.public_id);
+
+
+  if (user.image?.secure_url) {
+    deleteFile(user.image.public_id)
+    user.image.public_id = null
+    user.image.secure_url = null
   }
-  user.image = { public_id, secure_url };
+
+  user.image.secure_url = req.file.finalDest
+  user.image.public_id = req.file.path
+
   await user.save();
   return res.status(200).json({ message: "Done" });
 });
@@ -41,8 +43,9 @@ export const deleteProfilePic = asyncHandler(async (req, res, next) => {
   if (!user.image) {
     return next(new Error("Already you have not profilePic", { cause: 400 }));
   }
-  await cloudinary.uploader.destroy(user.image.public_id);
-  user.image = null;
+  deleteFile(user.image.public_id)
+  user.image.secure_url = null;
+  user.image.public_id = null;
   await user.save();
   return res.status(200).json({ message: "Done" });
 });

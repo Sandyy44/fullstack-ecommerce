@@ -19,7 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static uploads folder
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use("/uploads", express.static("./src/uploads"))
 
 // Routes
 app.use("/product", productRouter);

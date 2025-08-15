@@ -3,23 +3,25 @@ import * as validators from "./user.validation.js";
 import * as userController from "./controller/user.js";
 import { Router } from "express";
 import endPoint from "./user.endPoints.js";
-import { fileValidation, myMulter } from "../../utils/multer.js";
+import { fileUpload, fileValidation } from "../../utils/multer.js";
 import validation from "../../middleware/validation.js";
 const router = Router();
 
-// router.patch(
-//   "/profilePic",
-//   myMulter(fileValidation.image).single("image"),
-//   validation(validators.profilePic),
-//   auth(endPoint.allUsers),
-//   userController.profilePic
-// );
-// router.patch(
-//   "/deleteProfilePic",
-//   validation(validators.token),
-//   auth(endPoint.allUsers),
-//   userController.deleteProfilePic
-// );
+router.patch(
+  "/profilePic",
+ fileUpload("user/profileImage", fileValidation.image).single("image"),
+  validation(validators.profilePic),
+  auth(endPoint.allUsers),
+  userController.profilePic
+);
+
+router.patch(
+  "/deleteProfilePic",
+  validation(validators.token),
+  auth(endPoint.allUsers),
+  userController.deleteProfilePic
+);
+
 router.put(
   "/",
   validation(validators.updateUser),
