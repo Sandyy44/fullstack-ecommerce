@@ -7,29 +7,23 @@ import bootstrap from "./src/modules/index.router.js";
 import connectDB from "./DB/Conniction.js";
 import productRouter from "./src/modules/Product/product.router.js";
 
-// Set directory direname
+// dirname setup
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, "./config/.env") });
 
 const app = express();
-const port = process.env.PORT || 5000;
 
-// Middlewares for parsing requests
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static uploads folder
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-app.use("/uploads", express.static("./src/uploads"))
+app.use("/uploads", express.static("./src/uploads"));
 
 // Routes
 app.use("/product", productRouter);
 bootstrap(app, express);
 
-// DB connection
 connectDB();
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+
+export default app;
