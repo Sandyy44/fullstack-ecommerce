@@ -3,6 +3,7 @@ import { IProduct } from '../../Models/iproduct';
 import { ProductsService } from '../../Services/products.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { IProductsRes } from '../../Models/iproductRes';
 
 @Component({
   selector: 'app-products',
@@ -18,7 +19,7 @@ export class ProductsComponent {
   }
   ngOnInit() {
     this.productService.getAllProducts().subscribe(
-      (data:ProductsResponse) => {
+      (data: IProductsRes) => {
         console.log(data)
         this.products = data.products
         console.log(this.products)
@@ -28,7 +29,4 @@ export class ProductsComponent {
     )
 
   }
-}
-interface ProductsResponse {
-  products: IProduct[];
 }

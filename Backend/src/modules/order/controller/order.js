@@ -100,5 +100,5 @@ export const getOrders = async (req, res, next) => {
   if (!orders) {
     return next(new Error(`User has no orders`), { cause: 404 })
   }
-  return res.status(200).json({ orders })
+  return res.status(200).json({message:"Done", orders })
 }

@@ -91,7 +91,7 @@ export const deleteFromCartByProductId = async (req, res, next) => {
   }
       //product not found to delete
     if (!isProductInCart) {
-      return res.status(404).json({ message: "Product id not found" })
+      return next(new Error(`Product id not found`), { cause: 404 })
     }
 }
 
@@ -116,5 +116,5 @@ export const getCartData = async (req, res, next) => {
   if (!cart) {
     return next(new Error(`User has no cart`), { cause: 404 })
   }
-  return res.status(200).json({ cart })
+  return res.status(200).json({message:"Done", cart })
 }
