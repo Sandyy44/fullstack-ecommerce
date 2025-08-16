@@ -18,11 +18,6 @@ const bootstrap = (app, express) => {
     }
   });
 
-  // // Setup cors
-
-app.use(cors({
-  origin: "*",
-}));
 
 
   // // morgan check error

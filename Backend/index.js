@@ -12,7 +12,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, "./config/.env") });
 
 const app = express();
+  // // Setup cors
 
+  app.use(cors());
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
