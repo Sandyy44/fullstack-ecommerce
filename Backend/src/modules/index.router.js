@@ -5,7 +5,6 @@ import cartRouter from "./Cart/cart.router.js";
 import orderRouter from "./order/order.router.js";
 import morgan from "morgan";
 import { globalError } from "../utils/errorHandling.js";
-import cors from "cors";
 
 
 const bootstrap = (app, express) => {
