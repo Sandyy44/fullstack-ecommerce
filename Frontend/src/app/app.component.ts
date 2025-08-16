@@ -1,23 +1,21 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './component/navbar/navbar.component';
-import { SideMenuComponent } from './component/side-menu/side-menu.component';
-import { FooterComponent } from './component/footer/footer.component';
-// import { ProductsListComponent } from './component/products-list/products-list.component';
-import { ProductsParentComponent } from './component/products-parent/products-parent.component';
+import { HomeComponent } from './Components/home/home.component';
+import { ProductsComponent } from './Components/products/products.component';
+import { ProductDetailsComponent } from './Components/product-details/product-details.component';
+import { LoginComponent } from './Components/login/login.component';
+import { RegisterComponent } from './Components/register/register.component';
+import { CartComponent } from './Components/cart/cart.component';
+import { OrdersComponent } from './Components/orders/orders.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    NavbarComponent,
-    SideMenuComponent,
-    FooterComponent,
-    ProductsParentComponent,
-  ],
+  imports: [RouterOutlet,HomeComponent,ProductsComponent,ProductDetailsComponent,LoginComponent,RegisterComponent,CartComponent,OrdersComponent,ProfileComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'my-angular';
+  title = 'ecommerce';
 }
