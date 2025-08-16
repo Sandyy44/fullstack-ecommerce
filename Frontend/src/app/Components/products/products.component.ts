@@ -7,22 +7,28 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
-export class ProductsComponent {
-  products:IProduct[]=[]
-  constructor(private productService:ProductsService){
-    }
-     ngOnInit() {
-   this.productService.getAllProducts().subscribe({
-  
-    next: (data) => {
-      console.log(data)
-      return this.products = data},
-    error: (err) => console.error(err)
-  });
-}
 
+export class ProductsComponent {
+  products: IProduct[] = []
+  constructor(private productService: ProductsService) {
+  }
+  ngOnInit() {
+    this.productService.getAllProducts().subscribe(
+      (data:ProductsResponse) => {
+        console.log(data)
+        this.products = data.products
+        console.log(this.products)
+        return this.products
+      }
+
+    )
+
+  }
+}
+interface ProductsResponse {
+  products: IProduct[];
 }
