@@ -12,6 +12,7 @@ import cors from "cors";
 // dirname setup
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, "./config/.env") });
+const app = express();
 const corsOptions = {
   origin: [
     "http://localhost:4200" 
@@ -22,7 +23,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const app = express();
+
   // // Setup cors
 
   app.use(cors());
