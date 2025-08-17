@@ -1,1 +1,38 @@
-<p>home works!</p>
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">MyStore</div>
+  <ul class="nav-links">
+    <li><a routerLink="/">Home</a></li>
+    <li><a routerLink="/products">Products</a></li>
+    <li><a routerLink="/cart">Cart</a></li>
+    <li><a routerLink="/orders">Orders</a></li>
+    <li><a routerLink="/login">Login</a></li>
+    <li><a routerLink="/register">Register</a></li>
+  </ul>
+</nav>
+
+<!-- Banner -->
+<section class="banner">
+  <h1>Welcome to MyStore</h1>
+  <p>Shop the latest products with best offers</p>
+  <button>Shop Now</button>
+</section>
+
+<!-- Featured Products -->
+<section class="products">
+  <h2>Featured Products</h2>
+  <div class="product-list">
+    <div class="product-card" *ngFor="let product of products">
+      <img [src]="product.image" [alt]="product.name" />
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description }}</p>
+      <p class="price">Price: {{ product.price | currency:'EGP' }}</p>
+      <button>Add to Cart</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2025 MyStore. All Rights Reserved.</p>
+</footer>
