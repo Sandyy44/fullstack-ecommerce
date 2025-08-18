@@ -1,63 +1,160 @@
+/* ================= Navbar ================= */
 .navbar {
-  background: #222;
+  background-color: #1E3A8A; /* كحلي غامق */
   color: white;
-  padding: 15px;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.navbar .logo {
+  font-size: 1.8em;
+  font-weight: bold;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 15px;
+  gap: 20px;
 }
 
 .nav-links li a {
   color: white;
   text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
 }
 
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #3B82F6; /* أزرق فاتح */
+  text-decoration: underline;
+}
+
+/* ================= Banner ================= */
 .banner {
   text-align: center;
-  padding: 60px 20px;
-  background: #f2f2f2;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+  color: white;
+  border-radius: 0 0 20px 20px;
 }
 
+.banner h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.banner p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.banner button {
+  background-color: #FFFFFF;
+  color: #1E3A8A;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.banner button:hover {
+  background-color: #E0E7FF;
+}
+
+/* ================= Products ================= */
 .products {
-  padding: 40px 20px;
+  padding: 50px 20px;
   text-align: center;
+  background-color: #F9FAFB; /* خلفية رمادية فاتحة */
+}
+
+.products h2 {
+  font-size: 2em;
+  margin-bottom: 30px;
+  color: #1E3A8A;
 }
 
 .product-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 25px;
   justify-content: center;
 }
 
 .product-card {
-  border: 1px solid #ddd;
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 220px;
   padding: 15px;
-  width: 200px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
 }
 
 .product-card img {
   width: 100%;
-  height: auto;
+  border-radius: 10px;
+}
+
+.product-card h3 {
+  margin: 10px 0 5px 0;
+  font-size: 1.1em;
+}
+
+.product-card p {
+  font-size: 0.95em;
+  color: #374151; /* رمادي غامق */
 }
 
 .price {
-  color: green;
   font-weight: bold;
+  color: #1E3A8A;
+  margin-bottom: 10px;
 }
 
+.product-card button {
+  background-color: #1E3A8A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.product-card button:hover {
+  background-color: #3B82F6;
+}
+
+.content { /* أو أي اسم الكلاس اللي عندك */
+    background-color: #0b2476; /* أبيض */
+    padding: 30px; /* مساحة داخلية حوالين المحتوى */
+    border-radius: 10px; /* لو عايزاها مدورة الأطراف شوية */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* ظل خفيف لو تحبي */
+}
+.content {
+    width: 80%;
+    margin: 0 auto; /* عشان يجي في النص */
+}
+
+
+
+/* ================= Footer ================= */
 footer {
   text-align: center;
-  padding: 20px;
-  background: #222;
-  color: white;
+  padding: 25px;
+  background-color: #0f3a96; /* أسود غامق */
+  color: #F9FAFB;
   margin-top: 40px;
+  border-radius: 15px 15px 0 0;
 }

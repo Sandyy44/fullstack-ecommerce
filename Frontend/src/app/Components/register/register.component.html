@@ -1,1 +1,36 @@
-<p>register works!</p>
+<app-navbar></app-navbar>
+
+<div class="auth-container">
+  <!-- محتوى Login/Register -->
+</div>
+
+<div class="register-container">
+  <h2>Register</h2>
+
+  <form (ngSubmit)="register()">
+    <div>
+      <label>Username:</label>
+      <input type="text" [(ngModel)]="username" name="username" required>
+    </div>
+
+    <div>
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="email" name="email" required>
+    </div>
+
+    <div>
+      <label>Password:</label>
+      <input type="password" [(ngModel)]="password" name="password" required>
+    </div>
+
+    <div>
+      <label>Confirm Password:</label>
+      <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+    </div>
+
+    <button type="submit">Register</button>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+  </form>
+</div>

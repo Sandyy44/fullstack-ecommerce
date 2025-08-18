@@ -1,0 +1,40 @@
+.navbar {
+  background-color: #1E3A8A; /* أزرق غامق */
+  color: white;
+  padding: 12px 20px;          /* padding أخف */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ظل خفيف */
+}
+
+.navbar .logo {
+  font-size: 1.6em;            /* تكبير قليل */
+  font-weight: bold;
+  letter-spacing: 1px;         /* مسافة بين الحروف */
+  cursor: pointer;             /* شكل مؤشر الماوس */
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;                   /* مسافة أكبر بين اللينكات */
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  background-color: #3B82F6;   /* لون خلفية عند hover */
+  color: white;                 /* لون النص ثابت */
+  text-decoration: none;
+}
