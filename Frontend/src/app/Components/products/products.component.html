@@ -1,14 +1,15 @@
-<div *ngIf="isLoading">Loading products...</div>
-<div *ngIf="errorMessage">{{ errorMessage }}</div>
-
-<div class="products-container" *ngIf="!isLoading && !errorMessage">
+<div class="products-container">
   <div class="product-card" *ngFor="let product of products">
-    <img [src]="product.image?.type?.secure_url" [alt]="product.name">
+    <img [src]="product.image" [alt]="product.name">
+
     <h3>{{ product.name }}</h3>
     <p>{{ product.description }}</p>
+
     <span class="price">{{ product.price }} EGP</span>
+
     <p *ngIf="product.stock > 0">In Stock: {{ product.stock }}</p>
     <p *ngIf="product.stock === 0" style="color:red;">Out of Stock</p>
+
     <button [disabled]="product.stock === 0">Add to Cart</button>
   </div>
 </div>
