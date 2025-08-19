@@ -4,14 +4,14 @@ export interface IProduct {
   slug: string;
   image: {
     type: {
-      secure_url: String,
-      public_id: String
+      secure_url: string;
+      public_id: string;
     }
-  }
-  description:string,
+  };
+  description: string;
   price: number;
-  stock:number;
-  isDeleted:boolean,
+  stock: number;
+  isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
