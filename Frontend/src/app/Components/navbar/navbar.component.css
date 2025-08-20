@@ -1,40 +1,66 @@
 .navbar {
-  background-color: #1E3A8A; /* أزرق غامق */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 12px 20px;          /* padding أخف */
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ظل خفيف */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.navbar .logo {
-  font-size: 1.6em;            /* تكبير قليل */
-  font-weight: bold;
-  letter-spacing: 1px;         /* مسافة بين الحروف */
-  cursor: pointer;             /* شكل مؤشر الماوس */
+.logo {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
 }
 
 .nav-links {
-  list-style: none;
   display: flex;
-  gap: 25px;                   /* مسافة أكبر بين اللينكات */
+  gap: 12px;
+  align-items: center;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 
-.nav-links li a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 5px 10px;
-  border-radius: 5px;
-  transition: all 0.3s ease;
+.nav-links li {
+  list-style: none;
 }
 
-.nav-links li a:hover,
-.nav-links li a.active {
-  background-color: #3B82F6;   /* لون خلفية عند hover */
-  color: white;                 /* لون النص ثابت */
+.nav-links a {
+  color: #fff;
+  opacity: 0.95;
   text-decoration: none;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.nav-links a.active {
+  background: #ffffff;
+  color: #667eea;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25);
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 8px;
+  }
+
+  .nav-links a {
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
 }

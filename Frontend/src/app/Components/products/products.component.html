@@ -1,15 +1,137 @@
-<div class="products-container">
-  <div class="product-card" *ngFor="let product of products">
-    <img [src]="product.image" [alt]="product.name">
+<div class="products-page">
+  <!-- Header Section -->
+  <div class="products-header">
+    <div class="header-content">
+      <h1> Electronics Store</h1>
+      <p>Discover the latest tech products at the best prices</p>
+    </div>
+  </div>
 
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filters-container">
+      <!-- Search -->
+      <div class="search-box">
+        <input type="text" placeholder="Search for a product..." [(ngModel)]="searchTerm" (input)="onSearchChange()"
+          class="search-input">
+        <span class="search-icon"></span>
+      </div>
 
-    <span class="price">{{ product.price }} EGP</span>
+      <!-- Category Filter -->
+      <div class="filter-group">
+        <label>Category:</label>
+        <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()" class="filter-select">
+          <option value="all">All Categories</option>
+          <option *ngFor="let category of categories.slice(1)" [value]="category">
+            {{ category }}
+          </option>
+        </select>
+      </div>
 
-    <p *ngIf="product.stock > 0">In Stock: {{ product.stock }}</p>
-    <p *ngIf="product.stock === 0" style="color:red;">Out of Stock</p>
+      <!-- Sort Filter -->
+      <div class="filter-group">
+        <label>Sort by:</label>
+        <select [(ngModel)]="sortBy" (change)="onSortChange()" class="filter-select">
+          <option value="name">Name</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="rating">Rating</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-    <button [disabled]="product.stock === 0">Add to Cart</button>
+  <!-- Products Grid -->
+  <div class="products-container">
+    <div *ngIf="filteredProducts.length === 0" class="no-products">
+      <div class="no-products-icon"></div>
+      <h3>No products found</h3>
+      <p>Try changing your search criteria or status filter</p>
+    </div>
+
+    <div *ngFor="let product of filteredProducts" class="product-card">
+      <!-- Product Image -->
+      <div class="product-image">
+        <img [src]="product.image" [alt]="product.name" loading="lazy">
+
+        <!-- Badges -->
+        <div class="product-badges">
+          <span *ngIf="product.isNew" class="badge new">New</span>
+          <span *ngIf="product.isFeatured" class="badge featured">Featured</span>
+          <span *ngIf="product.discount" class="badge discount">-{{ product.discount }}%</span>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="action-btn wishlist" title="Add to Wishlist">❤️</button>
+          <button class="action-btn compare" title="Compare">⚖️</button>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <div class="product-category">{{ product.category }}</div>
+
+        <h3 class="product-name">{{ product.name }}</h3>
+
+        <p class="product-description">{{ product.description }}</p>
+
+        <!-- Rating -->
+        <div class="product-rating">
+          <div class="stars">
+            <span *ngFor="let star of getStarRating(product.rating)"
+              [class]="star === '★' ? 'star filled' : 'star empty'">
+              {{ star }}
+            </span>
+          </div>
+          <span class="rating-number">({{ product.rating }})</span>
+        </div>
+
+        <!-- Price -->
+        <div class="product-price">
+          <span *ngIf="product.discount" class="original-price">
+            {{ product.price | currency:'EGP':'symbol':'1.0-0' }}
+          </span>
+          <span class="current-price">
+            {{ getDiscountedPrice(product) | currency:'EGP':'symbol':'1.0-0' }}
+          </span>
+        </div>
+
+        <!-- Stock Status -->
+        <div class="stock-status">
+          <span *ngIf="product.stock > 0" class="in-stock">
+            ✅ In Stock: {{ product.stock }} items
+          </span>
+          <span *ngIf="product.stock === 0" class="out-of-stock">
+            ❌ Out of Stock
+          </span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="product-actions">
+          <button class="btn-add-cart" [disabled]="product.stock === 0" (click)="addToCart(product)">
+            <span *ngIf="product.stock > 0">🛒 Add to Cart</span>
+            <span *ngIf="product.stock === 0">Out of Stock</span>
+          </button>
+
+          <!-- replace the Details button block with this -->
+          <ng-container *ngIf="hasDetails(product); else noDetailsBtn">
+            <button class="btn-view-details" title="View Details" [routerLink]="['/product', product.id]">
+              👁️ Details
+            </button>
+          </ng-container>
+          <ng-template #noDetailsBtn>
+            <button class="btn-view-details" title="Details not available" disabled>
+              👁️ Details
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load More Button -->
+  <div *ngIf="filteredProducts.length > 0" class="load-more">
+    <button class="btn-load-more">Load More Products</button>
   </div>
 </div>

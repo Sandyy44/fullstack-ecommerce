@@ -1,29 +1,172 @@
 <div class="home-page">
-  <app-navbar></app-navbar>
-
-  <!-- Banner -->
-  <section class="banner">
-    <h1>Welcome to MyStore</h1>
-    <p>Shop the latest products with best offers</p>
-    <button>Shop Now</button>
+  <!-- Hero Banner Section -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <h1 class="hero-title">Welcome to ElectroHub</h1>
+      <p class="hero-subtitle">Discover amazing products with the best prices and quality</p>
+      <div class="hero-buttons">
+        <button class="btn-primary" (click)="scrollToCategories()">Shop Now</button>
+        <button class="btn-secondary" routerLink="/products">View Products</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&h=600&q=80"
+        alt="Electronics">
+    </div>
   </section>
 
-  <!-- Featured Products -->
-  <section class="products">
-    <h2>Featured Products</h2>
-    <div class="product-list">
-      <div class="product-card" *ngFor="let product of products">
-        <img [src]="product.image" [alt]="product.name" />
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
-        <p class="price">Price: {{ product.price | currency:'EGP' }}</p>
-        <button>Add to Cart</button>
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title">Why Choose MyStore?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🚚</div>
+          <h3>Free Shipping</h3>
+          <p>Free shipping on all orders over $50</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure Payment</h3>
+          <p>100% secure payment methods</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">↩️</div>
+          <h3>Easy Returns</h3>
+          <p>30-day return policy</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>24/7 Support</h3>
+          <p>Customer support anytime</p>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- Featured Products Section -->
+  <section class="featured-products">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-subtitle">Handpicked products for you</p>
+        <a routerLink="/products" class="view-all-link">View All Products →</a>
+      </div>
+
+      <div class="products-grid">
+        <div class="product-card" *ngFor="let product of featuredProducts">
+          <div class="product-badge" *ngIf="product.isNew">New</div>
+          <div class="product-badge discount" *ngIf="product.discount">-{{ product.discount }}%</div>
+
+          <div class="product-image">
+            <img [src]="product.image" [alt]="product.name" loading="lazy">
+            <div class="product-overlay">
+              <button class="btn-quick-view">👁️ Quick View</button>
+              <button class="btn-add-cart">🛒 Add to Cart</button>
+            </div>
+          </div>
+
+          <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-description">{{ product.description }}</p>
+
+            <div class="product-rating">
+              <div class="stars">
+                <span *ngFor="let star of getStarRating(product.rating)"
+                  [class]="star === '★' ? 'star filled' : 'star empty'">
+                  {{ star }}
+                </span>
+              </div>
+              <span class="rating-count">({{ product.rating }})</span>
+            </div>
+
+            <div class="product-price">
+              <span class="current-price">{{ product.price | currency:'EGP':'symbol':'1.0-0' }}</span>
+              <span class="original-price" *ngIf="product.discount">
+                {{ getOriginalPrice(product) | currency:'EGP':'symbol':'1.0-0' }}
+              </span>
+            </div>
+
+            <div class="product-actions">
+              <button class="btn-primary">Add to Cart</button>
+              <button class="btn-wishlist">❤️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories-section" id="categories" #categoriesSection>
+    <div class="container">
+      <h2 class="section-title">Shop by Category</h2>
+      <div class="categories-grid">
+        <div class="category-card" *ngFor="let category of categories">
+          <div class="category-image">
+            <img [src]="category.image" [alt]="category.name" loading="lazy">
+          </div>
+          <div class="category-overlay">
+            <h3>{{ category.name }}</h3>
+            <p>{{ category.count }} Products</p>
+            <button class="btn-category" [routerLink]="['/products']" [queryParams]="{category: category.name}">
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
   <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 MyStore. All Rights Reserved.</p>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>MyStore</h3>
+          <p>Your one-stop shop for all your needs. Quality products at the best prices.</p>
+          <div class="social-links">
+            <a href="#" class="social-link">��</a>
+            <a href="#" class="social-link">��</a>
+            <a href="#" class="social-link">��</a>
+            <a href="#" class="social-link">💼</a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a routerLink="/products">Products</a></li>
+            <li><a routerLink="/cart">Cart</a></li>
+            <li><a routerLink="/orders">Orders</a></li>
+            <li><a routerLink="/profile">Profile</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Customer Service</h4>
+          <ul class="footer-links">
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contact Info</h4>
+          <div class="contact-info">
+            <p>📍 123 Main Street, Cairo, Egypt</p>
+            <p>�� +20 123 456 7890</p>
+            <p>✉️ info&#64;mystore.com</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 MyStore. All Rights Reserved.</p>
+      </div>
+    </div>
   </footer>
 </div>

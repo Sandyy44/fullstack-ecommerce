@@ -1,1 +1,91 @@
-<p>product-details works!</p>
+<div class="product-details-page">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <button class="btn-back" (click)="goBack()">← Back to Products</button>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-category">{{ product?.category || 'Category' }}</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-product">{{ product?.name || 'Product' }}</span>
+    </div>
+
+    <!-- Product Main Section -->
+    <div class="product-main">
+        <div class="container">
+            <div class="product-layout">
+                <!-- Product Images -->
+                <div class="product-images">
+                    <div class="main-image">
+                        <img [src]="selectedImage || product?.image" [alt]="product?.name || 'product'" loading="lazy">
+                        <div class="image-badges">
+                            <span *ngIf="product?.isNew" class="badge new">New</span>
+                            <span *ngIf="product?.isFeatured" class="badge featured">Featured</span>
+                            <span *ngIf="product?.discount" class="badge discount">-{{ product?.discount }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="thumbnail-images">
+                        <div *ngFor="let image of (product?.images || [])" class="thumbnail"
+                            [class.active]="image === selectedImage" (click)="selectImage(image)">
+                            <img [src]="image" alt="thumbnail" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1 class="product-title">{{ product?.name || 'Product' }}</h1>
+
+                    <div class="product-price">
+                        <span class="current-price">{{ getDiscountedPrice() | currency:'EGP':'symbol':'1.0-0' }}</span>
+                        <span *ngIf="product?.discount" class="original-price">
+                            {{ product?.price | currency:'EGP':'symbol':'1.0-0' }}
+                        </span>
+                    </div>
+
+                    <div class="product-description">
+                        <p>{{ product?.description || 'Product description' }}</p>
+                    </div>
+
+                    <!-- Product Options -->
+                    <div class="product-options">
+                        <div class="option-group">
+                            <label>Quantity:</label>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" (click)="updateQuantity(-1)"
+                                    [disabled]="quantity <= 1">-</button>
+                                <input type="number" [(ngModel)]="quantity" min="1" [max]="product?.stock || 0"
+                                    class="quantity-input">
+                                <button class="quantity-btn" (click)="updateQuantity(1)"
+                                    [disabled]="quantity >= (product?.stock || 0)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="stock-status">
+                            <span *ngIf="(product?.stock || 0) > 0" class="in-stock">
+                                ✅ In Stock: {{ product?.stock }} items
+                            </span>
+                            <span *ngIf="(product?.stock || 0) === 0" class="out-of-stock">
+                                ❌ Out of Stock
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="product-actions">
+                        <button class="btn-primary" (click)="addToCart()"
+                            [disabled]="(product?.stock || 0) === 0 || isLoading">
+                            <span *ngIf="!isLoading">🛒 Add to Cart</span>
+                            <span *ngIf="isLoading">Adding...</span>
+                        </button>
+                    </div>
+
+                    <!-- Product Features -->
+                    <div class="product-features">
+                        <div class="feature"><span class="feature-icon">🚚</span><span>Free Shipping</span></div>
+                        <div class="feature"><span class="feature-icon">↩️</span><span>30-Day Returns</span></div>
+                        <div class="feature"><span class="feature-icon">🔒</span><span>Secure Payment</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

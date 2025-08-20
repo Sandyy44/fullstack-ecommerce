@@ -1,36 +1,144 @@
-<app-navbar></app-navbar>
-
-<div class="auth-container">
-  <!-- محتوى Login/Register -->
-</div>
-
-<div class="register-container">
-  <h2>Register</h2>
-
-  <form (ngSubmit)="register()">
-    <div>
-      <label>Username:</label>
-      <input type="text" [(ngModel)]="username" name="username" required>
+<div class="auth-page">
+  <!-- Header Section -->
+  <div class="auth-header">
+    <div class="header-content">
+      <h1> Join MyStore</h1>
+      <p>Create your account and start shopping today</p>
     </div>
+  </div>
 
-    <div>
-      <label>Email:</label>
-      <input type="email" [(ngModel)]="email" name="email" required>
+  <!-- Register Form -->
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="logo-icon"></span>
+        <h2>MyStore</h2>
+      </div>
+
+      <h3 class="auth-title">Create Account</h3>
+      <p class="auth-subtitle">Fill in your details to get started</p>
+
+      <form (ngSubmit)="register()" class="auth-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="text" id="username" [(ngModel)]="username" name="username" placeholder="Choose a username"
+              required class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email" required
+              class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="tel" id="phone" [(ngModel)]="phone" name="phone" placeholder="Enter your phone number" required
+              class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <select id="gender" [(ngModel)]="gender" name="gender" required class="form-input">
+              <option value="">Select your gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <!-- <option value="other">Other</option>
+              <option value="prefer-not-to-say">Prefer not to say</option> -->
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <textarea id="address" [(ngModel)]="address" name="address" placeholder="Enter your full address" required
+              class="form-input address-textarea" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Create a password"
+              required class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword"
+              placeholder="Confirm your password" required class="form-input">
+          </div>
+        </div>
+
+        <!-- <div class="form-options">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" name="terms" required>
+            <span class="checkmark"></span>
+            I agree to the <a href="#" class="terms-link">Terms & Conditions</a>
+          </label>
+          <label class="checkbox-wrapper">
+            <input type="checkbox" name="privacy" required>
+            <span class="checkmark"></span>
+            I agree to the <a href="#" class="terms-link">Privacy Policy</a>
+          </label>
+          <label class="checkbox-wrapper">
+            <input type="checkbox" name="newsletter">
+            <span class="checkmark"></span>
+            Subscribe to newsletter for updates and offers
+          </label>
+        </div> -->
+
+        <button type="submit" class="btn-primary" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading">Creating Account...</span>
+        </button>
+
+        <!-- <div class="auth-divider">
+          <span>or</span>
+        </div> -->
+
+        <!-- <div class="social-login">
+          <button type="button" class="btn-social google">
+            <span class="social-icon"></span>
+            Sign up with Google
+          </button>
+          <button type="button" class="btn-social facebook">
+            <span class="social-icon"></span>
+            Sign up with Facebook
+          </button>
+        </div> -->
+
+        <p class="error-message" *ngIf="errorMessage">
+          ❌ {{ errorMessage }}
+        </p>
+
+        <p class="success-message" *ngIf="successMessage">
+          ✅ {{ successMessage }}
+        </p>
+      </form>
+
+      <!-- <div class="auth-footer">
+        <p>Already have an account?
+          <a routerLink="/login" class="auth-link">Sign In</a>
+        </p>
+      </div> -->
     </div>
-
-    <div>
-      <label>Password:</label>
-      <input type="password" [(ngModel)]="password" name="password" required>
-    </div>
-
-    <div>
-      <label>Confirm Password:</label>
-      <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
-    </div>
-
-    <button type="submit">Register</button>
-
-    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
-    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
-  </form>
+  </div>
 </div>

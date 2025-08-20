@@ -1,1 +1,93 @@
-<p>cart works!</p>
+<div class="cart-container">
+  <!-- Header -->
+  <div class="cart-header">
+    <h1>🛒 Shopping Cart</h1>
+    <p class="cart-summary">You have {{ getTotalItems() }} items in your cart</p>
+  </div>
+
+  <!-- Empty Cart Message -->
+  <div *ngIf="cartItems.length === 0" class="empty-cart">
+    <div class="empty-cart-icon">��</div>
+    <h2>Your cart is empty</h2>
+    <p>You haven't added any products yet</p>
+    <button class="btn-primary" (click)="continueShopping()">
+      Start Shopping Now
+    </button>
+  </div>
+
+  <!-- Cart Items -->
+  <div *ngIf="cartItems.length > 0" class="cart-content">
+    <div class="cart-items">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div class="item-image">
+          <img [src]="item.image" [alt]="item.name" loading="lazy">
+        </div>
+
+        <div class="item-details">
+          <h3 class="item-name">{{ item.name }}</h3>
+          <p class="item-price">{{ item.price | currency:'EGP':'symbol':'1.0-0' }}</p>
+          <p class="item-stock">Available: {{ item.stock }} items</p>
+        </div>
+
+        <div class="item-quantity">
+          <label>Quantity:</label>
+          <div class="quantity-controls">
+            <button class="quantity-btn" (click)="updateQuantity(item, item.quantity - 1)"
+              [disabled]="item.quantity <= 1">
+              -
+            </button>
+            <input type="number" [ngModel]="item.quantity" (ngModelChange)="updateQuantity(item, $event)" min="1"
+              [max]="item.stock" class="quantity-input">
+            <button class="quantity-btn" (click)="updateQuantity(item, item.quantity + 1)"
+              [disabled]="item.quantity >= item.stock">
+              +
+            </button>
+          </div>
+        </div>
+
+        <div class="item-total">
+          <span class="total-label">Total:</span>
+          <span class="total-price">{{ item.price * item.quantity | currency:'EGP':'symbol':'1.0-0' }}</span>
+        </div>
+
+        <button class="remove-btn" (click)="removeItem(item.id)" title="Remove Item">
+          🗑️
+        </button>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="cart-summary-card">
+      <h3>Order Summary</h3>
+
+      <div class="summary-row">
+        <span>Total Items:</span>
+        <span>{{ getTotalItems() }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span>{{ getTotal() | currency:'EGP':'symbol':'1.0-0' }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span>Shipping:</span>
+        <span>Free</span>
+      </div>
+
+      <div class="summary-row total-row">
+        <span>Total Amount:</span>
+        <span>{{ getTotal() | currency:'EGP':'symbol':'1.0-0' }}</span>
+      </div>
+
+      <div class="cart-actions">
+        <button class="btn-secondary" (click)="continueShopping()">
+          ← Continue Shopping
+        </button>
+        <button class="btn-primary" (click)="checkout()">
+          Proceed to Checkout →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
