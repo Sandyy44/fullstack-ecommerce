@@ -1,18 +1,8 @@
 import mongoose from "mongoose";
-
-const connectDB = async () => {
-  const DBURI = process.env.DBURI;
-  try {
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(DBURI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      console.log("✅ MongoDB connected");
-    }
-  } catch (err) {
-    console.error("DB connection error:", err.message);
-  }
-};
-
-export default connectDB;
+const connectDB = async ()=>{
+    const DBURI = process.env.DBURI
+    return await mongoose.connect(DBURI)
+    .then(res=>console.log(`DB connected successfully on.....${DBURI}`))
+    .catch(err=>console.log(`Fail to connect DB..........${err}`))
+}
+export default connectDB

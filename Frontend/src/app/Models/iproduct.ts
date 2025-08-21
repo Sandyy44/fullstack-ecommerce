@@ -1,17 +1,18 @@
 export interface IProduct {
-  id: string;
+  id?: string;
   name: string;
-  slug: string;
-  image: {
-    type: {
-      secure_url: string;
-      public_id: string;
-    }
-  };
-  description: string;
-  price: number;
-  stock: number;
-  isDeleted: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  slug?: string;
+  image?: {
+      secure_url: String,
+      public_id?: String,
+      id?:string
+    
+  }
+  description?:string,
+  price?: number;
+  stock?:number;
+  totalAmount?:number;
+  isDeleted?:boolean,
+  createdAt?: Date;
+  updatedAt?: Date;
 }

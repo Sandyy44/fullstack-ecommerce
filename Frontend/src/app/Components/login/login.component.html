@@ -18,13 +18,19 @@
       <h3 class="auth-title">Sign In</h3>
       <p class="auth-subtitle">Enter your credentials to access your account</p>
 
-      <form (ngSubmit)="login()" class="auth-form">
+      <form [formGroup]="userLoginForm" (ngSubmit)="login()" class="auth-form">
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="email">Email</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <input type="text" id="username" [(ngModel)]="username" name="username" placeholder="Enter your username"
-              required class="form-input">
+            <input type="text" id="email" formControlName="email" name="email" placeholder="Enter your email" required
+              class="form-input">
+            @if(userLoginForm.get('email')?.touched && userLoginForm.get('email')?.errors?.['required']) {
+            <span class="text-danger">Email is required.</span>
+            }
+            @if(userLoginForm.get('email')?.touched && userLoginForm.get('email')?.errors?.['pattern']) {
+            <span class="text-danger">Please enter a valid email address.</span>
+            }
           </div>
         </div>
 
@@ -32,8 +38,12 @@
           <label for="password">Password</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <input type="password" id="password" [(ngModel)]="password" name="password"
+            <input type="password" id="password" formControlName="password" name="password"
               placeholder="Enter your password" required class="form-input">
+              @if(userLoginForm.get('password')?.touched && userLoginForm.get('password')?.errors?.['required']) {
+            <span class="text-danger">Password is required.</span>
+            }
+
           </div>
         </div>
 
@@ -45,10 +55,11 @@
           </label>
           <a href="#" class="forgot-password">Forgot Password?</a>
         </div>
-
-        <button type="submit" class="btn-primary" [disabled]="isLoading">
-          <span *ngIf="!isLoading">Sign In</span>
-          <span *ngIf="isLoading">Signing In...</span>
+        @if(errorMessage) {
+        <span class="text-danger">{{ errorMessage }}</span>
+        }
+        <button type="submit" class="btn-primary" [disabled]="userLoginForm.invalid">
+Login
         </button>
         <!-- 
         <div class="auth-divider">
@@ -66,13 +77,6 @@
           </button>
         </div> -->
 
-        <p class="error-message" *ngIf="errorMessage">
-          ❌ {{ errorMessage }}
-        </p>
-
-        <p class="success-message" *ngIf="successMessage">
-          ✅ {{ successMessage }}
-        </p>
       </form>
 
       <!-- <div class="auth-footer">

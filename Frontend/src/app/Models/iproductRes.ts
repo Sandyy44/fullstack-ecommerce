@@ -1,6 +1,6 @@
 import { IProduct } from "./iproduct";
 
-export interface IProductRes{
+export interface IProductWithMessageRes{
 message:string;
 product:IProduct
 }
@@ -8,7 +8,7 @@ export interface IProductsRes{
 products:IProduct[]
 }
 export interface IProductRes{
-products:IProduct
+product:IProduct
 }
 export interface IProductMessageRes{
 message:string

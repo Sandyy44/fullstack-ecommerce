@@ -1,11 +1,14 @@
 export interface ICart {
-  userId: string;
-  products:[ {
-    id: string,
-    quantity: number
+  userId?: string;
+  products?:[ {
+    id?: string,
+    quantity?: number
   }];
-  finalPrice: number;
-  createdAt: Date;
-  updatedAt: Date;
+  finalPrice?: number;
 
+
+}
+
+export interface ICartQuantity {
+    quantity?: number
 }

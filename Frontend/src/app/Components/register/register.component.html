@@ -18,13 +18,19 @@
       <h3 class="auth-title">Create Account</h3>
       <p class="auth-subtitle">Fill in your details to get started</p>
 
-      <form (ngSubmit)="register()" class="auth-form">
+      <form [formGroup]="userRegisterForm" (ngSubmit)="register()" class="auth-form">
         <div class="form-group">
           <label for="username">Username</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <input type="text" id="username" [(ngModel)]="username" name="username" placeholder="Choose a username"
+            <input type="text" id="username" formControlName="userName" name="username" placeholder="Choose a username"
               required class="form-input">
+            @if(userRegisterForm.get('userName')?.touched && userRegisterForm.get('userName')?.errors?.['required']) {
+            <span class="text-danger">Username is required.</span>
+            }
+            @if(userRegisterForm.get('userName')?.touched && userRegisterForm.get('userName')?.errors?.['pattern']) {
+            <span class="text-danger">Username must be 3–20 characters long and contain only lowercase letters.</span>
+            }
           </div>
         </div>
 
@@ -32,8 +38,14 @@
           <label for="email">Email Address</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email" required
+            <input type="email" id="email" formControlName="email" name="email" placeholder="Enter your email" required
               class="form-input">
+            @if(userRegisterForm.get('email')?.touched && userRegisterForm.get('email')?.errors?.['required']) {
+            <span class="text-danger">Email is required.</span>
+            }
+            @if(userRegisterForm.get('email')?.touched && userRegisterForm.get('email')?.errors?.['pattern']) {
+            <span class="text-danger">Please enter a valid email address.</span>
+            }
           </div>
         </div>
 
@@ -41,8 +53,14 @@
           <label for="phone">Phone Number</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <input type="tel" id="phone" [(ngModel)]="phone" name="phone" placeholder="Enter your phone number" required
-              class="form-input">
+            <input type="tel" id="phone" formControlName="phone" name="phone" placeholder="Enter your phone number"
+              required class="form-input">
+            @if(userRegisterForm.get('phone')?.touched && userRegisterForm.get('phone')?.errors?.['required']) {
+            <span class="text-danger">Phone number is required.</span>
+            }
+            @if(userRegisterForm.get('phone')?.touched && userRegisterForm.get('phone')?.errors?.['pattern']) {
+            <span class="text-danger">Phone number must be 11 digits.</span>
+            }
           </div>
         </div>
 
@@ -50,13 +68,16 @@
           <label for="gender">Gender</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <select id="gender" [(ngModel)]="gender" name="gender" required class="form-input">
+            <select id="gender" formControlName="gender" name="gender" required class="form-input">
               <option value="">Select your gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
               <!-- <option value="other">Other</option>
               <option value="prefer-not-to-say">Prefer not to say</option> -->
             </select>
+            @if(userRegisterForm.get('gender')?.touched && userRegisterForm.get('gender')?.errors?.['required']) {
+            <span class="text-danger">Gender is required.</span>
+            }
           </div>
         </div>
 
@@ -64,8 +85,12 @@
           <label for="address">Address</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <textarea id="address" [(ngModel)]="address" name="address" placeholder="Enter your full address" required
-              class="form-input address-textarea" rows="3"></textarea>
+            <textarea id="address" formControlName="address" name="address" placeholder="Enter your full address"
+              required class="form-input address-textarea" rows="3"></textarea>
+            @if(userRegisterForm.get('address')?.touched && userRegisterForm.get('address')?.errors?.['required']) {
+            <span class="text-danger">Address is required.</span>
+            }
+
           </div>
         </div>
 
@@ -73,8 +98,15 @@
           <label for="password">Password</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Create a password"
-              required class="form-input">
+            <input type="password" id="password" formControlName="password" name="password"
+              placeholder="Create a password" required class="form-input">
+            @if(userRegisterForm.get('password')?.touched && userRegisterForm.get('password')?.errors?.['required']) {
+            <span class="text-danger">Password is required.</span>
+            }
+            @if(userRegisterForm.get('password')?.touched && userRegisterForm.get('password')?.errors?.['pattern']) {
+            <span class="text-danger">Password must be at least 8 characters long and include at least one uppercase
+              letter.</span>
+            }
           </div>
         </div>
 
@@ -82,8 +114,15 @@
           <label for="confirmPassword">Confirm Password</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword"
+            <input type="password" id="confirmPassword" formControlName="cPassword" name="confirmPassword"
               placeholder="Confirm your password" required class="form-input">
+            @if(userRegisterForm.get('cPassword')?.touched && userRegisterForm.get('cPassword')?.errors?.['required']) {
+            <span class="text-danger">Confirming password is required.</span>
+            }
+            @if(userRegisterForm.get('cPassword')?.touched && userRegisterForm.get('cPassword')?.value !==
+            userRegisterForm.get('password')?.value) {
+            <span class="text-danger">Passwords do not match.</span>
+            }
           </div>
         </div>
 
@@ -104,11 +143,11 @@
             Subscribe to newsletter for updates and offers
           </label>
         </div> -->
-
-        <button type="submit" class="btn-primary" [disabled]="isLoading">
-          <span *ngIf="!isLoading">Create Account</span>
-          <span *ngIf="isLoading">Creating Account...</span>
-        </button>
+        @if(errorMessage) {
+        <span class="text-danger">{{ errorMessage }}</span>
+        }
+        <button type="submit" class="btn-primary"
+          [disabled]="userRegisterForm.invalid ||userRegisterForm.get('cPassword')?.value !== userRegisterForm.get('password')?.value">Register</button>
 
         <!-- <div class="auth-divider">
           <span>or</span>
@@ -125,13 +164,7 @@
           </button>
         </div> -->
 
-        <p class="error-message" *ngIf="errorMessage">
-          ❌ {{ errorMessage }}
-        </p>
 
-        <p class="success-message" *ngIf="successMessage">
-          ✅ {{ successMessage }}
-        </p>
       </form>
 
       <!-- <div class="auth-footer">

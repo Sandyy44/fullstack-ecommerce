@@ -1,77 +1,58 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IUser } from '../../Models/iuser';
+import { AuthService } from '../../services/auth.service';
+import { IAuthSignup } from '../../Models/iauthRes';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  username: string = '';
-  email: string = '';
-  phone: string = '';
-  gender: string = '';
-  address: string = '';
-  password: string = '';
-  confirmPassword: string = '';
-  errorMessage: string = '';
-  successMessage: string = '';
-  isLoading: boolean = false;
 
-  constructor(private router: Router) { }
+  userRegisterForm: FormGroup
+  signupRes!: IAuthSignup
+  errorMessage: string = '';
+
+  constructor(private router: Router, private authService: AuthService) {
+
+    this.userRegisterForm = new FormGroup({
+      userName: new FormControl('', [Validators.required, Validators.pattern(/^[a-z]{3,20}$/)]),
+      email: new FormControl('', [Validators.required, Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)]),
+      phone: new FormControl('', [Validators.required, Validators.pattern(/^\d{11}$/)]),
+      gender: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*[A-Z]).{8,}$/)]),
+      cPassword: new FormControl('', [Validators.required])
+    })
+
+  }
 
   register() {
-    if (!this.username || !this.email || !this.phone || !this.gender ||
-      !this.address || !this.password || !this.confirmPassword) {
-      this.errorMessage = 'Please fill in all required fields';
-      return;
-    }
+    const user: IUser = this.userRegisterForm.value as IUser;
+    console.log(user);
 
-    if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Passwords do not match';
-      return;
-    }
+    this.authService.signup(user).subscribe({
+      next: (res) => {
+        this.signupRes = res;
+        console.log(this.signupRes)
+        this.router.navigate(['/login'])
 
-    if (this.password.length < 6) {
-      this.errorMessage = 'Password must be at least 6 characters long';
-      return;
-    }
+      },
+      error: (err) => {
+        console.error("Error fetching product:", err);
+        console.log(err.error.errMass)
+        this.errorMessage=err.error.errMass;
+      }
+    });
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.email)) {
-      this.errorMessage = 'Please enter a valid email address';
-      return;
-    }
-
-    // Phone validation
-    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
-    if (!phoneRegex.test(this.phone)) {
-      this.errorMessage = 'Please enter a valid phone number';
-      return;
-    }
-
-    // Username validation
-    if (this.username.length < 3) {
-      this.errorMessage = 'Username must be at least 3 characters long';
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    // Simulate API call
-    setTimeout(() => {
-      this.successMessage = 'Account created successfully! Redirecting to login...';
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 2000);
-      this.isLoading = false;
-    }, 2000);
   }
+
 }
+
+
