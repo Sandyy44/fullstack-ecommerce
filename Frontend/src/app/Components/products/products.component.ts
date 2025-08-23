@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { RouterLink } from '@angular/router';
-import { ProductsService } from '../../services/products.service';
+import { ProductService } from '../../services/products.service';
 import { IProduct } from '../../Models/iproduct';
 import { IProductsRes } from '../../Models/iproductRes';
 import { CategoryService } from '../../services/category.service';
@@ -25,38 +25,48 @@ export class ProductsComponent implements OnInit {
   selectedCategory: string = 'all';
   searchTerm: string = '';
   sortBy: string = 'name';
+  isLoggedIn: boolean = false;
 
-  constructor(private productService: ProductsService, private categoryService: CategoryService, private route: ActivatedRoute) {
+  constructor(private productService: ProductService, private categoryService: CategoryService, private route: ActivatedRoute) {
 
   }
   ngOnInit() {
-  // Load categories and products in parallel
-  this.categoryService.getAllCategories().subscribe(
-    (catData: ICategoriesRes) => {
-      this.categories = catData.categories;
-
-      this.productService.getAllProducts().subscribe(
-        (prodData: IProductsRes) => {
-          this.products = prodData.products;
-          this.filteredProducts = this.shuffleArray(this.products);
-
-          // Now handle query params
-          this.route.queryParams.subscribe(params => {
-            const categoryName = params['category'];
-            if (categoryName && this.categories) {
-              const category = this.categories.find(c => c.name?.toLowerCase() === categoryName.toLowerCase());
-              if (category) {
-                this.selectedCategory = category._id || 'all';
-              }
-            }
-            // Filter after everything is ready
-            this.filterProducts();
-          });
-        }
-      );
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    this.isLoggedIn = !!token;
+    
+    if (!token) {
+      // User not logged in, don't load products
+      return;
     }
-  );
-}
+
+    // Load categories and products in parallel
+    this.categoryService.getAllCategories().subscribe(
+      (catData: ICategoriesRes) => {
+        this.categories = catData.categories;
+
+        this.productService.getAllProducts().subscribe(
+          (prodData: IProductsRes) => {
+            this.products = prodData.products;
+            this.filteredProducts = this.shuffleArray(this.products);
+
+            // Now handle query params
+            this.route.queryParams.subscribe(params => {
+              const categoryName = params['category'];
+              if (categoryName && this.categories) {
+                const category = this.categories.find(c => c.name?.toLowerCase() === categoryName.toLowerCase());
+                if (category) {
+                  this.selectedCategory = category._id || 'all';
+                }
+              }
+              // Filter after everything is ready
+              this.filterProducts();
+            });
+          }
+        );
+      }
+    );
+  }
 
   shuffleArray(array: any[]) {
     return array

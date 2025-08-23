@@ -3,11 +3,20 @@ export interface IProduct {
   name: string;
   slug?: string;
   image?: {
-    secure_url: String,
-    public_id?: String,
+    secure_url: string,
+    public_id?: string,
     id?: string
-
   }
+  mainImage?: {
+    secure_url: string,
+    public_id?: string,
+    id?: string
+  }
+  subImages?: {
+    secure_url: string,
+    public_id?: string,
+    id?: string
+  }[]
   description?: string;
   price?: number;
   stock?: number;
@@ -15,5 +24,10 @@ export interface IProduct {
   isDeleted?: boolean,
   createdBy?: string;
   catId?: string;
+  categoryId?: string | {
+    _id: string;
+    name: string;
+  };
+  brand?: string;
   discount?: number;
 }

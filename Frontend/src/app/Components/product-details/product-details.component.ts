@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { IProduct } from '../../Models/iproduct';
-import { ProductsService } from '../../services/products.service';
+import { ProductService } from '../../services/products.service';
 import { IProductRes, IProductsRes } from '../../Models/iproductRes';
 import { ICategory } from '../../Models/icategory';
 import { CategoryService } from '../../services/category.service';
@@ -42,7 +42,7 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductsService,
+    private productService: ProductService,
     private categoryService: CategoryService
   ) { }
 

@@ -1,0 +1,216 @@
+<div class="create-product-container">
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Back to Dashboard
+    </button>
+    <h1>{{isEditMode ? 'Edit Product' : 'Create New Product'}}</h1>
+  </div>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+    <div class="form-sections">
+      <!-- Basic Information Section -->
+      <div class="form-section">
+        <h2>Basic Information</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Product Name *</label>
+            <input 
+              type="text" 
+              id="name"
+              formControlName="name"
+              class="form-control"
+              [class.error]="name?.invalid && name?.touched"
+              placeholder="Enter product name"
+            >
+            <div class="error-message" *ngIf="name?.invalid && name?.touched">
+              <span *ngIf="name?.errors?.['required']">Product name is required</span>
+              <span *ngIf="name?.errors?.['minlength']">Name must be at least 3 characters</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="brand">Brand</label>
+            <input 
+              type="text" 
+              id="brand"
+              formControlName="brand"
+              class="form-control"
+              placeholder="Enter brand name"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea 
+            id="description"
+            formControlName="description"
+            class="form-control"
+            [class.error]="description?.invalid && description?.touched"
+            rows="4"
+            placeholder="Enter detailed product description"
+          ></textarea>
+          <div class="error-message" *ngIf="description?.invalid && description?.touched">
+            <span *ngIf="description?.errors?.['required']">Description is required</span>
+            <span *ngIf="description?.errors?.['minlength']">Description must be at least 10 characters</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="categoryId">Category *</label>
+          <select 
+            id="categoryId"
+            formControlName="categoryId"
+            class="form-control"
+            [class.error]="categoryId?.invalid && categoryId?.touched"
+          >
+            <option value="">Select a category</option>
+            <option *ngFor="let category of categories" [value]="category._id">
+              {{category.name}}
+            </option>
+          </select>
+          <div class="error-message" *ngIf="categoryId?.invalid && categoryId?.touched">
+            <span *ngIf="categoryId?.errors?.['required']">Category is required</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing & Inventory Section -->
+      <div class="form-section">
+        <h2>Pricing & Inventory</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price">Price ($) *</label>
+            <input 
+              type="number" 
+              id="price"
+              formControlName="price"
+              class="form-control"
+              [class.error]="price?.invalid && price?.touched"
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+            >
+            <div class="error-message" *ngIf="price?.invalid && price?.touched">
+              <span *ngIf="price?.errors?.['required']">Price is required</span>
+              <span *ngIf="price?.errors?.['min']">Price must be greater than 0</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="stock">Stock Quantity *</label>
+            <input 
+              type="number" 
+              id="stock"
+              formControlName="stock"
+              class="form-control"
+              [class.error]="stock?.invalid && stock?.touched"
+              placeholder="0"
+              min="0"
+            >
+            <div class="error-message" *ngIf="stock?.invalid && stock?.touched">
+              <span *ngIf="stock?.errors?.['required']">Stock quantity is required</span>
+              <span *ngIf="stock?.errors?.['min']">Stock cannot be negative</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="discount">Discount (%)</label>
+            <input 
+              type="number" 
+              id="discount"
+              formControlName="discount"
+              class="form-control"
+              placeholder="0"
+              min="0"
+              max="100"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Images Section -->
+      <div class="form-section">
+        <h2>Product Images</h2>
+        
+        <!-- Main Image -->
+        <div class="image-upload-section">
+          <h3>Main Image</h3>
+          <div class="image-upload-area">
+            <div class="upload-zone" *ngIf="!mainImagePreview">
+              <input 
+                type="file" 
+                id="mainImage"
+                accept="image/*"
+                (change)="onMainImageSelected($event)"
+                class="file-input"
+              >
+              <label for="mainImage" class="upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Click to upload main image</span>
+                <small>PNG, JPG, GIF up to 10MB</small>
+              </label>
+            </div>
+            
+            <div class="image-preview" *ngIf="mainImagePreview">
+              <img [src]="mainImagePreview" alt="Main image preview">
+              <button type="button" class="remove-image-btn" (click)="removeMainImage()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub Images -->
+        <div class="image-upload-section">
+          <h3>Additional Images</h3>
+          <div class="image-upload-area">
+            <div class="upload-zone">
+              <input 
+                type="file" 
+                id="subImages"
+                accept="image/*"
+                multiple
+                (change)="onSubImagesSelected($event)"
+                class="file-input"
+              >
+              <label for="subImages" class="upload-label">
+                <i class="fas fa-images"></i>
+                <span>Click to upload additional images</span>
+                <small>Select multiple images</small>
+              </label>
+            </div>
+            
+            <div class="sub-images-preview" *ngIf="subImagePreviews.length > 0">
+              <div class="sub-image-item" *ngFor="let preview of subImagePreviews; let i = index">
+                <img [src]="preview" alt="Sub image preview">
+                <button type="button" class="remove-image-btn" (click)="removeSubImage(i)">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn secondary" (click)="goBack()">
+        Cancel
+      </button>
+      <button 
+        type="submit" 
+        class="btn primary"
+        [disabled]="productForm.invalid || isLoading"
+      >
+        <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
+        <i class="fas fa-save" *ngIf="!isLoading"></i>
+        {{isLoading ? 'Saving...' : (isEditMode ? 'Update Product' : 'Create Product')}}
+      </button>
+    </div>
+  </form>
+</div>

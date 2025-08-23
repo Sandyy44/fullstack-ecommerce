@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ICategory } from '../../Models/icategory';
 import { CategoryService } from '../../services/category.service';
 import { ICategoriesRes } from '../../Models/icategoryRes';
-import { ProductsService } from '../../services/products.service';
+import { ProductService } from '../../services/products.service';
 import { IProductsRes } from '../../Models/iproductRes';
 import { IProduct } from '../../Models/iproduct';
 
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   categories: ICategory[] = [];
   products: IProduct[] = []
 
-  constructor(private categoryService: CategoryService, private productService: ProductsService) {
+  constructor(private categoryService: CategoryService, private productService: ProductService) {
 
   }
 

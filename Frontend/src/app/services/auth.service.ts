@@ -45,4 +45,20 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
   }
+
+  isLoggedIn(): boolean {
+    return !!this.getAccessToken();
+  }
+
+  getUserRole(): string | null {
+    const token = this.getAccessToken();
+    if (!token) return null;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.role || 'user';
+    } catch (error) {
+      return null;
+    }
+  }
 }
