@@ -3,6 +3,7 @@ import userRouter from "./User/user.router.js";
 import productRouter from "./Product/product.router.js";
 import cartRouter from "./Cart/cart.router.js";
 import orderRouter from "./order/order.router.js";
+import categoryRouter from "./Category/category.router.js";
 import morgan from "morgan";
 import { globalError } from "../utils/errorHandling.js";
 
@@ -35,6 +36,8 @@ const bootstrap = (app, express) => {
   app.use(`/product`, productRouter);
   app.use(`/cart`, cartRouter);
   app.use(`/order`, orderRouter);
+    app.use(`/category`, categoryRouter);
+
 
   app.use((req, res,next) => {
    return res.status(404).json({ message: "In-valid routing" });

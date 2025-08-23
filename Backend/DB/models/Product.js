@@ -46,8 +46,23 @@ const productSchema = new Schema(
     isDeleted: {
       type: Boolean,
       default: false
+    },
+    catId: {
+      type: Types.ObjectId,
+      ref: "Category",
+      required: [true, "catId is required"],
     }
-  },
+    ,
+    discount: {
+      type: Number,
+      default: 0
+    },createdBy: {
+  type: Types.ObjectId,
+  ref: "User",
+  required: true
+}
+  }
+  ,
   {
     timestamps: true
   }

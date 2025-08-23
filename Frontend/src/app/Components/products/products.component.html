@@ -22,20 +22,19 @@
         <label>Category:</label>
         <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()" class="filter-select">
           <option value="all">All Categories</option>
-          <option *ngFor="let category of categories.slice(1)" [value]="category">
-            {{ category }}
+          <option *ngFor="let category of categories" [ngValue]="category._id">
+            {{ category?.name }}
+            
           </option>
         </select>
       </div>
-
       <!-- Sort Filter -->
       <div class="filter-group">
         <label>Sort by:</label>
         <select [(ngModel)]="sortBy" (change)="onSortChange()" class="filter-select">
-          <option value="name">Name</option>
+          <option value="name">None</option>
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
-          <option value="rating">Rating</option>
         </select>
       </div>
     </div>
@@ -52,12 +51,12 @@
     <div *ngFor="let product of filteredProducts" class="product-card">
       <!-- Product Image -->
       <div class="product-image">
-        <img [src]="product.image" [alt]="product.name" loading="lazy">
+        <img src="http://localhost:5000{{product.image?.secure_url}}"  [alt]="product.name" loading="lazy">
 
         <!-- Badges -->
         <div class="product-badges">
-          <span *ngIf="product.isNew" class="badge new">New</span>
-          <span *ngIf="product.isFeatured" class="badge featured">Featured</span>
+          <!-- <span *ngIf="product.isNew" class="badge new">New</span>
+          <span *ngIf="product.isFeatured" class="badge featured">Featured</span> -->
           <span *ngIf="product.discount" class="badge discount">-{{ product.discount }}%</span>
         </div>
 
@@ -70,14 +69,14 @@
 
       <!-- Product Info -->
       <div class="product-info">
-        <div class="product-category">{{ product.category }}</div>
+        <div class="product-category">{{ getCategoryName(product.catId || '') }}</div>
 
         <h3 class="product-name">{{ product.name }}</h3>
 
         <p class="product-description">{{ product.description }}</p>
 
         <!-- Rating -->
-        <div class="product-rating">
+        <!-- <div class="product-rating">
           <div class="stars">
             <span *ngFor="let star of getStarRating(product.rating)"
               [class]="star === '★' ? 'star filled' : 'star empty'">
@@ -85,7 +84,7 @@
             </span>
           </div>
           <span class="rating-number">({{ product.rating }})</span>
-        </div>
+        </div> -->
 
         <!-- Price -->
         <div class="product-price">
@@ -99,7 +98,7 @@
 
         <!-- Stock Status -->
         <div class="stock-status">
-          <span *ngIf="product.stock > 0" class="in-stock">
+          <span *ngIf="product.stock&&product.stock > 0" class="in-stock">
             ✅ In Stock: {{ product.stock }} items
           </span>
           <span *ngIf="product.stock === 0" class="out-of-stock">
@@ -110,21 +109,14 @@
         <!-- Action Buttons -->
         <div class="product-actions">
           <button class="btn-add-cart" [disabled]="product.stock === 0" (click)="addToCart(product)">
-            <span *ngIf="product.stock > 0">🛒 Add to Cart</span>
+            <span *ngIf="product.stock&&product.stock > 0">🛒 Add to Cart</span>
             <span *ngIf="product.stock === 0">Out of Stock</span>
           </button>
 
           <!-- replace the Details button block with this -->
-          <ng-container *ngIf="hasDetails(product); else noDetailsBtn">
-            <button class="btn-view-details" title="View Details" [routerLink]="['/product', product.id]">
+            <button class="btn-view-details" title="View Details" [routerLink]="['/product', product._id]">
               👁️ Details
             </button>
-          </ng-container>
-          <ng-template #noDetailsBtn>
-            <button class="btn-view-details" title="Details not available" disabled>
-              👁️ Details
-            </button>
-          </ng-template>
         </div>
       </div>
     </div>

@@ -1,28 +1,26 @@
 import * as productController from './controller/product.js';
-import {  fileValidation, fileUpload } from '../../utils/multer.js';
+import { fileValidation, fileUpload } from '../../utils/multer.js';
 import cartRouter from "../Cart/cart.router.js";
 import { Router } from "express";
-
+import { endPoint } from './product.endPoints.js';
+import { auth } from '../../middleware/auth.js'
 const router = Router({ mergeParams: true });
 router.use("/:productId/cart", cartRouter);
 
 // Create Product
-router.post("/",fileUpload("product/", fileValidation.image).single("image"), productController.createProduct);
+router.post("/", auth(endPoint.create), fileUpload("product/", fileValidation.image).single("image"), productController.createProduct);
 
 // Update Product
-router.put("/:id", productController.updateProduct);
+router.put("/:id", auth(endPoint.update), productController.updateProduct);
 
 // Delete Product
-router.delete("/:id", productController.deleteProduct);
+router.delete("/:id", auth(endPoint.delete), productController.deleteProduct);
 
 // Get all products
 router.get("/", productController.getAllProducts);
 
-// Get all products for admin
-router.get("/admin", productController.getAllProductsAdmin);
-
 // Get product by id
-router.get("/:id", productController.getProductById);
+router.get("/:id", auth(endPoint.get), productController.getProductById);
 
 export default router;
 

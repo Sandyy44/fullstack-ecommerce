@@ -1,3 +1,4 @@
+
 import slugify from "slugify";
 import productModel from "../../../../DB/models/Product.js";
 
@@ -5,6 +6,8 @@ import productModel from "../../../../DB/models/Product.js";
 export const createProduct = async (req, res, next) => {
     try {
         const { name, price, description, stock } = req.body;
+        req.body.createdBy = req.user._id;
+        console.log(req.user._id);
 
         if (!name) {
             return res.status(400).json({ message: "Product name is required" });
@@ -13,9 +16,12 @@ export const createProduct = async (req, res, next) => {
         req.body.slug = slugify(name, { replacement: '-', trim: true, lower: true });
 
         if (req.file) {
-            user.image.secure_url = req.file.finalDest
-            user.image.public_id = req.file.path
+            req.body.image = {
+                secure_url: `/uploads/product/${req.file.filename}`,
+                public_id: req.file.filename
+            };
         }
+
 
         const product = await productModel.create(req.body);
         res.status(201).json({ message: "Product created successfully", product });
