@@ -46,26 +46,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.productService.getAllProducts().subscribe(
-      (data: IProductsRes) => {
-        //console.log(data)
-        this.products = data.products
-        //console.log(this.products)
-        return this.products
-      }
-
-    )
+  (productData: IProductsRes) => {
+    this.products = productData.products;
 
     this.categoryService.getAllCategories().subscribe(
-      (data: ICategoriesRes) => {
-        //console.log(data)
-        this.categories = data.categories ?? []
-        this.updateCategoryCounts();
-
-        //console.log(this.categories)
-        return this.categories
+      (categoryData: ICategoriesRes) => {
+        this.categories = categoryData.categories ?? [];
+        this.updateCategoryCounts(); // now products are already loaded
       }
+    );
+  }
+);
 
-    )
 
 
     this.loadFeaturedProducts();
