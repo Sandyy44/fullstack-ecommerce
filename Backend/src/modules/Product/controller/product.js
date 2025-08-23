@@ -42,6 +42,12 @@ export const updateProduct = async (req, res, next) => {
         if (req.body.name) {
             req.body.slug = slugify(req.body.name, { replacement: '-', trim: true, lower: true });
         }
+        if (req.file) {
+            req.body.image = {
+                secure_url: `/uploads/product/${req.file.filename}`,
+                public_id: req.file.filename
+            };
+        }
 
         const updatedProduct = await productModel.findByIdAndUpdate(id, req.body, { new: true });
         if (!updatedProduct) return res.status(404).json({ message: "Product not found" });

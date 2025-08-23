@@ -8,7 +8,7 @@ export interface IProduct {
     id?: string
 
   }
-  description?: string,
+  description?: string;
   price?: number;
   stock?: number;
   totalAmount?: number;

@@ -11,7 +11,7 @@ router.use("/:productId/cart", cartRouter);
 router.post("/", auth(endPoint.create), fileUpload("product/", fileValidation.image).single("image"), productController.createProduct);
 
 // Update Product
-router.put("/:id", auth(endPoint.update), productController.updateProduct);
+router.put("/:id", auth(endPoint.update),fileUpload("product/", fileValidation.image).single("image"), productController.updateProduct);
 
 // Delete Product
 router.delete("/:id", auth(endPoint.delete), productController.deleteProduct);

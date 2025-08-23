@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { ProductsService } from '../../services/products.service';
 import { IProduct } from '../../Models/iproduct';
@@ -26,15 +26,32 @@ export class ProductsComponent implements OnInit {
   searchTerm: string = '';
   sortBy: string = 'name';
 
-  constructor(private productService: ProductsService, private categoryService: CategoryService) {
+  constructor(private productService: ProductsService, private categoryService: CategoryService, private route: ActivatedRoute) {
 
   }
   ngOnInit() {
     this.categoryService.getAllCategories().subscribe(
       (data: ICategoriesRes) => {
-        console.log(data)
+        //console.log(data)
         this.categories = data.categories
-        console.log(this.categories)
+
+        this.route.queryParams.subscribe(params => {
+          const categoryName = params['category'];
+          if (categoryName) {
+            // Find the category _id by name
+            const category = this.categories?.find(c => c.name == categoryName);
+            console.log(categoryName)
+            console.log(this.categories)
+            console.log(category)
+            if (category) {
+              console.log(category)
+              console.log(category._id)
+              this.selectedCategory = category._id || 'all';
+              this.filterProducts();
+            }
+          }
+        });
+        //console.log(this.categories)
         return this.categories
       }
 
@@ -61,7 +78,14 @@ export class ProductsComponent implements OnInit {
 
 
 
+
+
+
+
+
+
   }
+
   shuffleArray(array: any[]) {
     return array
       .map(value => ({ value, sort: Math.random() }))
@@ -71,10 +95,10 @@ export class ProductsComponent implements OnInit {
   loadProducts() {
     this.productService.getAllProducts().subscribe(
       (data: IProductsRes) => {
-        console.log(data)
+        //console.log(data)
         this.products = data.products
         this.filteredProducts = this.shuffleArray(data.products)
-        console.log(this.products)
+        //console.log(this.products)
         return this.products
       }
 
@@ -117,6 +141,7 @@ export class ProductsComponent implements OnInit {
 
   onCategoryChange() {
     this.filterProducts();
+
   }
 
   onSearchChange() {

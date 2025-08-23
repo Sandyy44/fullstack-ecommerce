@@ -3,6 +3,12 @@ import categoryModel from '../../../../DB/models/Category.js';
 // create category
 export const createCat = async (req, res, next) => {
   const { name } = req.body;
+  if (req.file) {
+    req.body.image = {
+      secure_url: `/uploads/categories/${req.file.filename}`,
+      public_id: req.file.filename
+    };
+  }
   let category = await categoryModel.findOne({ name })
   if (category) {
     return next(new Error("Category already added."), { cause: 400 })
@@ -39,8 +45,25 @@ export const updateCategory = async (req, res, next) => {
     return next(new Error(`Category id not found.`), { cause: 404 })
   }
   const { name } = req.body;
-  const updatedCategory = await categoryModel.findOneAndUpdate({ _id: catId }, { name }, { new: true })
-  return res.status(200).json({ message: "Updated category successfully", updatedCategory })
+  let updatedCategory;
+  if (name) {
+    updatedCategory = await categoryModel.findOneAndUpdate({ _id: catId }, { name }, { new: true })
+  }
+  if (req.file) {
+    req.body.image = {
+      secure_url: `/uploads/categories/${req.file.filename}`,
+      public_id: req.file.filename
+    };
+    updatedCategory = await categoryModel.findOneAndUpdate({ _id: catId }, { image: req.body.image }, { new: true })
+
+  }
+  if (name || req.file) {
+    return res.status(200).json({ message: "Updated category successfully", updatedCategory })
+  }
+  else {
+    return next(new Error(`No data provided to update.`), { cause: 400 })
+
+  }
 
 }
 export const getAllCategories = async (req, res, next) => {

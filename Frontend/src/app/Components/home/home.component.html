@@ -55,13 +55,13 @@
 
       <div class="products-grid">
         <div class="product-card" *ngFor="let product of featuredProducts">
-          <div class="product-badge" *ngIf="product.isNew">New</div>
+          <div class="product-badge">New</div>
           <div class="product-badge discount" *ngIf="product.discount">-{{ product.discount }}%</div>
 
           <div class="product-image">
-            <img [src]="product.image" [alt]="product.name" loading="lazy">
+            <img src="http://localhost:5000{{product.image?.secure_url}}" [alt]="product.name" loading="lazy">
             <div class="product-overlay">
-              <button class="btn-quick-view">👁️ Quick View</button>
+              <button class="btn-quick-view" [routerLink]="['/product', product._id]">👁️ Quick View</button>
               <button class="btn-add-cart">🛒 Add to Cart</button>
             </div>
           </div>
@@ -70,7 +70,7 @@
             <h3 class="product-name">{{ product.name }}</h3>
             <p class="product-description">{{ product.description }}</p>
 
-            <div class="product-rating">
+            <!-- <div class="product-rating">
               <div class="stars">
                 <span *ngFor="let star of getStarRating(product.rating)"
                   [class]="star === '★' ? 'star filled' : 'star empty'">
@@ -78,7 +78,7 @@
                 </span>
               </div>
               <span class="rating-count">({{ product.rating }})</span>
-            </div>
+            </div> -->
 
             <div class="product-price">
               <span class="current-price">{{ product.price | currency:'EGP':'symbol':'1.0-0' }}</span>
@@ -104,7 +104,7 @@
       <div class="categories-grid">
         <div class="category-card" *ngFor="let category of categories">
           <div class="category-image">
-            <img [src]="category.image" [alt]="category.name" loading="lazy">
+            <img src="http://localhost:5000{{category.image?.secure_url}}" [alt]="category.name" >
           </div>
           <div class="category-overlay">
             <h3>{{ category.name }}</h3>
