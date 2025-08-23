@@ -30,61 +30,33 @@ export class ProductsComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.categoryService.getAllCategories().subscribe(
-      (data: ICategoriesRes) => {
-        //console.log(data)
-        this.categories = data.categories
+  // Load categories and products in parallel
+  this.categoryService.getAllCategories().subscribe(
+    (catData: ICategoriesRes) => {
+      this.categories = catData.categories;
 
-        this.route.queryParams.subscribe(params => {
-          const categoryName = params['category'];
-          if (categoryName) {
-            // Find the category _id by name
-            const category = this.categories?.find(c => c.name == categoryName);
-            console.log(categoryName)
-            console.log(this.categories)
-            console.log(category)
-            if (category) {
-              console.log(category)
-              console.log(category._id)
-              this.selectedCategory = category._id || 'all';
-              this.filterProducts();
+      this.productService.getAllProducts().subscribe(
+        (prodData: IProductsRes) => {
+          this.products = prodData.products;
+          this.filteredProducts = this.shuffleArray(this.products);
+
+          // Now handle query params
+          this.route.queryParams.subscribe(params => {
+            const categoryName = params['category'];
+            if (categoryName && this.categories) {
+              const category = this.categories.find(c => c.name?.toLowerCase() === categoryName.toLowerCase());
+              if (category) {
+                this.selectedCategory = category._id || 'all';
+              }
             }
-          }
-        });
-        //console.log(this.categories)
-        return this.categories
-      }
-
-    )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    this.loadProducts();
-    this.filteredProducts = [...this.products];
-
-
-
-
-
-
-
-
-
-
-
-
-  }
+            // Filter after everything is ready
+            this.filterProducts();
+          });
+        }
+      );
+    }
+  );
+}
 
   shuffleArray(array: any[]) {
     return array

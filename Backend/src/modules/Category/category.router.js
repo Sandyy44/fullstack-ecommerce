@@ -9,10 +9,10 @@ const router = Router({ mergeParams: true })
 router.post('/',auth(endPoint.create),fileUpload("categories/", fileValidation.image).single("image") ,categoryController.createCat)
 
 // get all categories
-router.get('/',auth(endPoint.get), categoryController.getAllCategories)
+router.get('/', categoryController.getAllCategories)
 
 // get category by id
-router.get('/:id',auth(endPoint.get), categoryController.getCategoryById)
+router.get('/:id', categoryController.getCategoryById)
 
 // update category by id
 router.patch('/:id',auth(endPoint.update),fileUpload("categories/", fileValidation.image).single("image"), categoryController.updateCategory)
