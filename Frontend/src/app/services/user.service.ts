@@ -40,4 +40,20 @@ export class UserService {
   updatePassword(body: IUser): Observable<IUserMessageRes> {
     return this.httpClient.patch<IUserMessageRes>(`${URL}/user/updatePassword`, body);
   }
+
+  sendForgetPasswordCode(email: string): Observable<IUserMessageRes> {
+    return this.httpClient.post<IUserMessageRes>(`${URL}/auth/sendCode`, { email });
+  }
+
+  resetPassword(email: string, code: string, password: string): Observable<IUserMessageRes> {
+    return this.httpClient.post<IUserMessageRes>(`${URL}/auth/forgetPassword`, { email, code, password });
+  }
+
+  uploadProfilePic(formData: FormData): Observable<IUserMessageRes> {
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    return this.httpClient.patch<IUserMessageRes>(`${URL}/user/profilePic`, formData, { headers });
+  }
 }

@@ -14,20 +14,21 @@ import { filter } from 'rxjs';
 })
 export class NavbarComponent implements OnInit {
   token!: string | null;
-  constructor(private authService: AuthService, private router: Router,    private route: ActivatedRoute,
-  ) {
-
-
+  userRole!: string | null;
+  
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
   }
  ngOnInit() {
-    // Initial token
+    // Initial token and role
     this.token = this.authService.getAccessToken();
+    this.userRole = this.authService.getUserRole();
 
-    // Update token on every navigation
+    // Update token and role on every navigation
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         this.token = this.authService.getAccessToken();
+        this.userRole = this.authService.getUserRole();
       });
   }
 

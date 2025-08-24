@@ -8,12 +8,17 @@
       @if(token){
       <li><a routerLink="/cart" routerLinkActive="active">Cart</a></li>
       <li><a routerLink="/orders" routerLinkActive="active">Orders</a></li>
+      <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
+      @if(userRole === 'admin' || userRole === 'user'){
+      <li><a routerLink="/admin" routerLinkActive="active">Admin Panel</a></li>
+      }
       <li><a (click)="onLogout($event)">Logout</a></li>
 
       }
       @else {
       <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
       <li><a routerLink="/register" routerLinkActive="active">Register</a></li>
+      <li><a routerLink="/forget-password" routerLinkActive="active">Forgot Password</a></li>
       }
 
     </ng-container>

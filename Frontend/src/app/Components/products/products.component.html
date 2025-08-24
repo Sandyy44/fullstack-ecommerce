@@ -1,54 +1,66 @@
 <div class="products-page">
-  <!-- Header Section -->
-  <div class="products-header">
-    <div class="header-content">
-      <h1> Electronics Store</h1>
-      <p>Discover the latest tech products at the best prices</p>
+  <!-- Not Logged In Message -->
+  <div *ngIf="!isLoggedIn" class="login-required">
+    <div class="login-message">
+      <i class="fas fa-lock"></i>
+      <h2>Login Required</h2>
+      <p>Please log in to view our products</p>
+      <a routerLink="/login" class="login-btn">Go to Login</a>
     </div>
   </div>
 
-  <!-- Filters Section -->
-  <div class="filters-section">
-    <div class="filters-container">
-      <!-- Search -->
-      <div class="search-box">
-        <input type="text" placeholder="Search for a product..." [(ngModel)]="searchTerm" (input)="onSearchChange()"
-          class="search-input">
-        <span class="search-icon"></span>
-      </div>
-
-      <!-- Category Filter -->
-      <div class="filter-group">
-        <label>Category:</label>
-        <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()" class="filter-select">
-          <option value="all">All Categories</option>
-          <option *ngFor="let category of categories" [ngValue]="category._id">
-            {{ category?.name }}
-            
-          </option>
-        </select>
-      </div>
-      <!-- Sort Filter -->
-      <div class="filter-group">
-        <label>Sort by:</label>
-        <select [(ngModel)]="sortBy" (change)="onSortChange()" class="filter-select">
-          <option value="name">None</option>
-          <option value="price-low">Price: Low to High</option>
-          <option value="price-high">Price: High to Low</option>
-        </select>
+  <!-- Products Content (only show when logged in) -->
+  <div *ngIf="isLoggedIn">
+    <!-- Header Section -->
+    <div class="products-header">
+      <div class="header-content">
+        <h1> Electronics Store</h1>
+        <p>Discover the latest tech products at the best prices</p>
       </div>
     </div>
-  </div>
 
-  <!-- Products Grid -->
-  <div class="products-container">
-    <div *ngIf="filteredProducts.length === 0" class="no-products">
-      <div class="no-products-icon"></div>
-      <h3>No products found</h3>
-      <p>Try changing your search criteria or status filter</p>
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <div class="filters-container">
+        <!-- Search -->
+        <div class="search-box">
+          <input type="text" placeholder="Search for a product..." [(ngModel)]="searchTerm" (input)="onSearchChange()"
+            class="search-input">
+          <span class="search-icon"></span>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label>Category:</label>
+          <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()" class="filter-select">
+            <option value="all">All Categories</option>
+            <option *ngFor="let category of categories" [ngValue]="category._id">
+              {{ category?.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sort Filter -->
+        <div class="filter-group">
+          <label>Sort by:</label>
+          <select [(ngModel)]="sortBy" (change)="onSortChange()" class="filter-select">
+            <option value="name">None</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <div *ngFor="let product of filteredProducts" class="product-card">
+    <!-- Products Grid -->
+    <div class="products-container">
+      <div *ngIf="filteredProducts.length === 0" class="no-products">
+        <div class="no-products-icon"></div>
+        <h3>No products found</h3>
+        <p>Try changing your search criteria or status filter</p>
+      </div>
+
+      <div *ngFor="let product of filteredProducts" class="product-card">
       <!-- Product Image -->
       <div class="product-image">
         <img src="http://localhost:5000{{product.image?.secure_url}}"  [alt]="product.name" loading="lazy">
