@@ -27,6 +27,7 @@ export class AdminDashboardComponent implements OnInit {
 
   loadProducts() {
     this.isLoading = true;
+<<<<<<< HEAD
     console.log('Loading products...');
     this.productService.getAllProducts().subscribe({
       next: (response: any) => {
@@ -34,12 +35,21 @@ export class AdminDashboardComponent implements OnInit {
         this.products = response.products || response;
         this.isLoading = false;
         console.log('Products loaded:', this.products.length);
+=======
+    this.productService.getAllProducts().subscribe({
+      next: (response: any) => {
+        this.products = response.products || response;
+        this.isLoading = false;
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
       },
       error: (error: any) => {
         this.error = 'Failed to load products';
         this.isLoading = false;
         console.error('Error loading products:', error);
+<<<<<<< HEAD
         alert('Failed to load products: ' + (error.error?.message || error.message));
+=======
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
       }
     });
   }
@@ -49,6 +59,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   editProduct(productId: string) {
+<<<<<<< HEAD
     if (productId) {
       this.router.navigate(['/admin/edit-product', productId]);
     }
@@ -66,11 +77,25 @@ export class AdminDashboardComponent implements OnInit {
         next: () => {
           this.products = this.products.filter(p => p._id !== productId);
           alert('Product deleted successfully!');
+=======
+    this.router.navigate(['/admin/edit-product', productId]);
+  }
+
+  deleteProduct(productId: string, productName: string) {
+    if (confirm(`Are you sure you want to delete "${productName}"?`)) {
+      this.productService.deleteProduct(productId).subscribe({
+        next: () => {
+          this.products = this.products.filter(p => p._id !== productId);
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
           console.log('Product deleted successfully');
         },
         error: (error: any) => {
           console.error('Error deleting product:', error);
+<<<<<<< HEAD
           alert('Failed to delete product: ' + (error.error?.message || 'Please try again.'));
+=======
+          alert('Failed to delete product. Please try again.');
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
         }
       });
     }
@@ -101,6 +126,7 @@ export class AdminDashboardComponent implements OnInit {
     return 'No Category';
   }
 
+<<<<<<< HEAD
   trackByProductId(index: number, product: IProduct): string {
     return product._id || index.toString();
   }
@@ -109,4 +135,6 @@ export class AdminDashboardComponent implements OnInit {
     event.target.src = 'assets/default-product.png';
   }
 
+=======
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
 }

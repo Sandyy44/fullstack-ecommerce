@@ -42,6 +42,7 @@ export class CreateProductComponent implements OnInit {
 
   initializeForm() {
     this.productForm = this.fb.group({
+<<<<<<< HEAD
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       price: ['', [Validators.required, Validators.min(0.01)]],
@@ -49,6 +50,15 @@ export class CreateProductComponent implements OnInit {
       categoryId: [''],
       brand: [''],
       discount: [0]
+=======
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      price: ['', [Validators.required, Validators.min(0.01)]],
+      stock: ['', [Validators.required, Validators.min(0)]],
+      categoryId: ['', Validators.required],
+      brand: [''],
+      discount: ['', [Validators.min(0), Validators.max(100)]]
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
     });
   }
 
@@ -142,6 +152,7 @@ export class CreateProductComponent implements OnInit {
     this.subImagePreviews.splice(index, 1);
   }
 
+<<<<<<< HEAD
 
   onSubmit() {
     console.log('Form submitted!');
@@ -191,6 +202,48 @@ export class CreateProductComponent implements OnInit {
         alert('Error: ' + (error.error?.message || 'Failed to save product'));
       }
     });
+=======
+  onSubmit() {
+    if (this.productForm.valid) {
+      this.isLoading = true;
+      
+      const formData = new FormData();
+      const formValue = this.productForm.value;
+
+      // Append form fields
+      Object.keys(formValue).forEach(key => {
+        if (formValue[key] !== null && formValue[key] !== '') {
+          formData.append(key, formValue[key]);
+        }
+      });
+
+      // Append images
+      if (this.selectedMainImage) {
+        formData.append('mainImage', this.selectedMainImage);
+      }
+
+      this.selectedSubImages.forEach((file: File) => {
+        formData.append('subImages', file);
+      });
+
+      const request = this.isEditMode 
+        ? this.productService.updateProduct(this.productId!, formData)
+        : this.productService.createProduct(formData);
+
+      request.subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          console.log('Product saved successfully:', response);
+          this.router.navigate(['/admin/dashboard']);
+        },
+        error: (error: any) => {
+          this.isLoading = false;
+          console.error('Error saving product:', error);
+          alert('Failed to save product. Please try again.');
+        }
+      });
+    }
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
   }
 
   goBack() {
