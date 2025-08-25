@@ -1,0 +1,173 @@
+<div class="admin-panel">
+  <div class="admin-header">
+    <h1>Admin Control Panel</h1>
+    <p>Manage your ecommerce store</p>
+  </div>
+
+  <div class="admin-cards">
+    <!-- Products Management Card -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-box"></i>
+      </div>
+      <div class="card-content">
+        <h3>Products Management</h3>
+        <p>View, edit, and delete products</p>
+        <div class="card-stats">
+          <span>{{products.length}} Products</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn primary" (click)="goToProductsManagement()">
+          <i class="fas fa-cog"></i>
+          Manage Products
+        </button>
+      </div>
+    </div>
+
+    <!-- Add Product Card -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-plus-circle"></i>
+      </div>
+      <div class="card-content">
+        <h3>Add New Product</h3>
+        <p>Create new products for your store</p>
+        <div class="card-stats">
+          <span>Quick Add</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn success" (click)="goToAddProduct()">
+          <i class="fas fa-plus"></i>
+          Add Product
+        </button>
+      </div>
+    </div>
+
+    <!-- Orders Management Card -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="card-content">
+        <h3>Orders Management</h3>
+        <p>View and manage customer orders</p>
+        <div class="card-stats">
+          <span>0 Pending Orders</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn info" (click)="goToOrders()">
+          <i class="fas fa-list"></i>
+          View Orders
+        </button>
+      </div>
+    </div>
+
+    <!-- Users Management Card -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="card-content">
+        <h3>Users Management</h3>
+        <p>Manage customer accounts</p>
+        <div class="card-stats">
+          <span>0 Active Users</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn warning" (click)="goToUsers()">
+          <i class="fas fa-user-cog"></i>
+          Manage Users
+        </button>
+      </div>
+    </div>
+
+    <!-- Categories Management Card -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-tags"></i>
+      </div>
+      <div class="card-content">
+        <h3>Categories</h3>
+        <p>Manage product categories</p>
+        <div class="card-stats">
+          <span>{{categories.length}} Categories</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn secondary" (click)="goToCategories()">
+          <i class="fas fa-tag"></i>
+          Manage Categories
+        </button>
+      </div>
+    </div>
+
+    <!-- Reports Card -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-chart-bar"></i>
+      </div>
+      <div class="card-content">
+        <h3>Reports & Analytics</h3>
+        <p>View sales and performance reports</p>
+        <div class="card-stats">
+          <span>Dashboard</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn dark" (click)="goToReports()">
+          <i class="fas fa-chart-line"></i>
+          View Reports
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Section -->
+  <div class="quick-stats">
+    <h2>Quick Overview</h2>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">{{products.length}}</div>
+        <div class="stat-label">Total Products</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Orders Today</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Revenue</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{categories.length}}</div>
+        <div class="stat-label">Categories</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Products Preview -->
+  <div class="recent-products" *ngIf="products.length > 0">
+    <h2>Recent Products</h2>
+    <div class="products-preview">
+      <div class="product-preview-item" *ngFor="let product of products.slice(0, 5)">
+        <img [src]="getImageUrl(product)" [alt]="product.name" class="product-thumb">
+        <div class="product-info">
+          <h4>{{product.name}}</h4>
+          <p>${{product.price}}</p>
+        </div>
+        <div class="product-actions">
+          <button class="btn-small edit" (click)="editProduct(product._id || '')">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-small delete" (click)="deleteProduct(product._id || '', product.name || '')">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

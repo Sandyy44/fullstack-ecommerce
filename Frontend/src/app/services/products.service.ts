@@ -8,7 +8,7 @@ let URL: string = "http://localhost:5000"
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
+export class ProductService {
 
   constructor(private httpClient: HttpClient) {
 
@@ -23,11 +23,11 @@ export class ProductsService {
     return this.httpClient.get<IProductRes>(`${URL}/product/${id}`)
   }
 
-  createProduct(body: IProduct): Observable<IProductRes> {
+  createProduct(body: FormData): Observable<IProductRes> {
     return this.httpClient.post<IProductRes>(`${URL}/product`, body)
 
   }
-  updateProduct(id: string, body: IProduct): Observable<IProductWithMessageRes> {
+  updateProduct(id: string, body: FormData): Observable<IProductWithMessageRes> {
     return this.httpClient.put<IProductWithMessageRes>(`${URL}/product/${id}`, body)
 
   }

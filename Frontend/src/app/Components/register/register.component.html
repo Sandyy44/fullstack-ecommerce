@@ -85,12 +85,22 @@
           <label for="address">Address</label>
           <div class="input-wrapper">
             <span class="input-icon"></span>
-            <textarea id="address" formControlName="address" name="address" placeholder="Enter your full address"
-              required class="form-input address-textarea" rows="3"></textarea>
+            <input type="text" id="address" formControlName="address" name="address" placeholder="Enter your address"
+              required class="form-input">
             @if(userRegisterForm.get('address')?.touched && userRegisterForm.get('address')?.errors?.['required']) {
             <span class="text-danger">Address is required.</span>
             }
+          </div>
+        </div>
 
+        <div class="form-group">
+          <label for="role">Account Type</label>
+          <div class="input-wrapper">
+            <span class="input-icon"></span>
+            <select id="role" formControlName="role" name="role" class="form-input">
+              <option value="User">Regular User</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
         </div>
 

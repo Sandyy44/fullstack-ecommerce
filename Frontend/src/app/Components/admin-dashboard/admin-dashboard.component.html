@@ -1,0 +1,76 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <button class="add-product-btn" (click)="addNewProduct()">
+      Add New Product
+    </button>
+  </div>
+
+  <div class="products-section">
+    <div class="loading-spinner" *ngIf="isLoading">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Loading products...</p>
+    </div>
+
+    <div class="error-message" *ngIf="error && !isLoading">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>{{ error }}</p>
+      <button class="retry-btn" (click)="loadProducts()">Retry</button>
+    </div>
+
+    <div class="debug-info" *ngIf="!isLoading && !error">
+      <p>Products count: {{ products.length }}</p>
+      <p>Backend URL: http://localhost:5000</p>
+    </div>
+
+    <div class="products-table-container" *ngIf="!isLoading && !error && products.length > 0">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Show</th>
+            <th>Update</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products; trackBy: trackByProductId">
+            <td>{{ product._id?.slice(-6) || 'N/A' }}</td>
+            <td>{{ product.name || 'No Name' }}</td>
+            <td>{{ formatPrice(product.price || 0) }}</td>
+            <td>{{ (product.description || 'No description') | slice:0:50 }}{{ (product.description?.length || 0) > 50 ? '...' : '' }}</td>
+            <td>
+              <img [src]="getImageUrl(product)" alt="{{ product.name }}" class="product-image" 
+                   (error)="onImageError($event)">
+            </td>
+            <td>
+              <button class="action-btn show-btn" (click)="showProduct(product._id || '')" 
+                      [disabled]="!product._id">Show</button>
+            </td>
+            <td>
+              <button class="action-btn update-btn" (click)="editProduct(product._id || '')" 
+                      [disabled]="!product._id">Update</button>
+            </td>
+            <td>
+              <button class="action-btn delete-btn" (click)="deleteProduct(product._id || '', product.name || '')" 
+                      [disabled]="!product._id">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && !error && products.length === 0">
+      <i class="fas fa-box-open"></i>
+      <h3>No Products Found</h3>
+      <p>Start by adding your first product to the store.</p>
+      <button class="add-product-btn" (click)="addNewProduct()">
+        Add First Product
+      </button>
+    </div>
+  </div>
+</div>

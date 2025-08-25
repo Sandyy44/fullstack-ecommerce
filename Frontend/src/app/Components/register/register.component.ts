@@ -27,6 +27,7 @@ export class RegisterComponent {
       phone: new FormControl('', [Validators.required, Validators.pattern(/^\d{11}$/)]),
       gender: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
+      role: new FormControl('User'),
       password: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*[A-Z]).{8,}$/)]),
       cPassword: new FormControl('', [Validators.required])
     })

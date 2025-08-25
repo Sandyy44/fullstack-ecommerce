@@ -46,6 +46,7 @@ export const generalFields = {
     encoding: joi.string().required(),
     originalname: joi.string().required(),
     fieldname: joi.string().required(),
+    finalDest: joi.string().optional(),
   }),
   headers: joi.string().required(),
 };
