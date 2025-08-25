@@ -9,8 +9,18 @@
       <li><a routerLink="/cart" routerLinkActive="active">Cart</a></li>
       <li><a routerLink="/orders" routerLinkActive="active">Orders</a></li>
       <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
+<<<<<<< HEAD
       @if(userRole === 'admin' || userRole === 'user'){
       <li><a routerLink="/admin" routerLinkActive="active">Admin Panel</a></li>
+=======
+<<<<<<< HEAD
+      @if(userRole === 'admin' || userRole === 'user'){
+      <li><a routerLink="/admin" routerLinkActive="active">Admin Panel</a></li>
+=======
+      @if(userRole === 'admin'){
+      <li><a routerLink="/admin/dashboard" routerLinkActive="active">Admin Dashboard</a></li>
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
+>>>>>>> de9a267de73261afdf4420689530616685815c58
       }
       <li><a (click)="onLogout($event)">Logout</a></li>
 

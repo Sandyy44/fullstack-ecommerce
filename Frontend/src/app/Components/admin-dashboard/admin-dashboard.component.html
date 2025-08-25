@@ -2,11 +2,69 @@
   <div class="dashboard-header">
     <h1>Admin Dashboard</h1>
     <button class="add-product-btn" (click)="addNewProduct()">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+      <i class="fas fa-plus"></i>
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
+>>>>>>> de9a267de73261afdf4420689530616685815c58
       Add New Product
     </button>
   </div>
 
+<<<<<<< HEAD
   <div class="products-section">
+=======
+<<<<<<< HEAD
+  <div class="products-section">
+=======
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-box"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{products.length}}</h3>
+        <p>Total Products</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="stat-info">
+        <h3>0</h3>
+        <p>Orders Today</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-info">
+        <h3>0</h3>
+        <p>Active Users</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="products-section">
+    <div class="section-header">
+      <h2>Products Management</h2>
+      <div class="search-filter">
+        <input type="text" placeholder="Search products..." class="search-input">
+        <select class="filter-select">
+          <option value="">All Categories</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+          <option value="books">Books</option>
+        </select>
+      </div>
+    </div>
+
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
+>>>>>>> de9a267de73261afdf4420689530616685815c58
     <div class="loading-spinner" *ngIf="isLoading">
       <i class="fas fa-spinner fa-spin"></i>
       <p>Loading products...</p>
@@ -14,6 +72,10 @@
 
     <div class="error-message" *ngIf="error && !isLoading">
       <i class="fas fa-exclamation-triangle"></i>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> de9a267de73261afdf4420689530616685815c58
       <p>{{ error }}</p>
       <button class="retry-btn" (click)="loadProducts()">Retry</button>
     </div>
@@ -62,6 +124,50 @@
           </tr>
         </tbody>
       </table>
+<<<<<<< HEAD
+=======
+=======
+      <p>{{error}}</p>
+      <button (click)="loadProducts()" class="retry-btn">Retry</button>
+    </div>
+
+    <div class="products-grid" *ngIf="!isLoading && !error">
+      <div class="product-card" *ngFor="let product of products">
+        <div class="product-image">
+          <img [src]="getImageUrl(product)" [alt]="product.name" />
+          <div class="product-status" [class]="(product.stock || 0) > 0 ? 'in-stock' : 'out-of-stock'">
+            {{(product.stock || 0) > 0 ? 'In Stock' : 'Out of Stock'}}
+          </div>
+        </div>
+        
+        <div class="product-info">
+          <h3 class="product-name">{{product.name}}</h3>
+          <p class="product-description">{{(product.description || '') | slice:0:100}}{{(product.description || '').length > 100 ? '...' : ''}}</p>
+          
+          <div class="product-details">
+            <div class="price-stock">
+              <span class="price">{{formatPrice(product.price || 0)}}</span>
+              <span class="stock">Stock: {{product.stock || 0}}</span>
+            </div>
+            <div class="category">
+              <span class="category-badge">{{getCategoryName(product.categoryId)}}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="product-actions">
+          <button class="action-btn edit-btn" (click)="editProduct(product._id || '')" title="Edit Product">
+            <i class="fas fa-edit"></i>
+            Edit
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteProduct(product._id || '', product.name || '')" title="Delete Product">
+            <i class="fas fa-trash"></i>
+            Delete
+          </button>
+        </div>
+      </div>
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
+>>>>>>> de9a267de73261afdf4420689530616685815c58
     </div>
 
     <div class="empty-state" *ngIf="!isLoading && !error && products.length === 0">
@@ -69,6 +175,13 @@
       <h3>No Products Found</h3>
       <p>Start by adding your first product to the store.</p>
       <button class="add-product-btn" (click)="addNewProduct()">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        <i class="fas fa-plus"></i>
+>>>>>>> 76dda69e9c1c91ac722eb28637b3dbb16009bdd2
+>>>>>>> de9a267de73261afdf4420689530616685815c58
         Add First Product
       </button>
     </div>
