@@ -9,6 +9,8 @@ import { ProfileComponent } from './Components/profile/profile.component';
 import { ProductDetailsComponent } from './Components/product-details/product-details.component';
 import { ForgetPasswordComponent } from './Components/forget-password/forget-password.component';
 import { AdminDashboardComponent } from './Components/admin-dashboard/admin-dashboard.component';
+import { AdminPanelComponent } from './Components/admin-panel/admin-panel.component';
+
 import { CreateProductComponent } from './Components/create-product/create-product.component';
 import { authGuard } from './Guards/auth.guard';
 import { adminGuard } from './Guards/admin.guard';
@@ -25,8 +27,10 @@ export const routes: Routes = [
   { path: 'cart', component: CartComponent, canActivate: [authGuard] },
   { path: 'orders', component: OrdersComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent , canActivate: [authGuard]},
+  { path: 'admin', component: AdminPanelComponent, canActivate: [authGuard] },
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [adminGuard] },
   { path: 'admin/create-product', component: CreateProductComponent, canActivate: [adminGuard] },
   { path: 'admin/edit-product/:id', component: CreateProductComponent, canActivate: [adminGuard] },
+
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

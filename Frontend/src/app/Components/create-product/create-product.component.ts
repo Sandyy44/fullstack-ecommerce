@@ -142,47 +142,59 @@ export class CreateProductComponent implements OnInit {
     this.subImagePreviews.splice(index, 1);
   }
 
+
+
   onSubmit() {
-    if (this.productForm.valid) {
-      this.isLoading = true;
-      
-      const formData = new FormData();
-      const formValue = this.productForm.value;
+    console.log('Form submitted!');
+    console.log('Form valid:', this.productForm.valid);
+    console.log('Form value:', this.productForm.value);
 
-      // Append form fields
-      Object.keys(formValue).forEach(key => {
-        if (formValue[key] !== null && formValue[key] !== '') {
-          formData.append(key, formValue[key]);
-        }
-      });
+    if (!this.productForm.valid) {
+      alert('Please fill in all required fields');
+      return;
+    }
 
-      // Append images
-      if (this.selectedMainImage) {
-        formData.append('mainImage', this.selectedMainImage);
+    this.isLoading = true;
+
+    const formData = new FormData();
+    const formValue = this.productForm.value;
+
+    // Append form fields
+    formData.append('name', formValue.name || '');
+    formData.append('description', formValue.description || '');
+    formData.append('price', formValue.price || '0');
+    formData.append('stock', formValue.stock || '10');
+    formData.append('categoryId', formValue.categoryId || '');
+    formData.append('brand', formValue.brand || '');
+    formData.append('discount', formValue.discount || '0');
+
+    // Append images
+    if (this.selectedMainImage) {
+      formData.append('mainImage', this.selectedMainImage);
+    }
+
+    console.log('Sending data to backend...');
+
+    const request = this.isEditMode
+      ? this.productService.updateProduct(this.productId!, formData)
+      : this.productService.createProduct(formData);
+
+    request.subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
+        console.log('Success:', response);
+        alert('Product saved successfully!');
+        this.router.navigate(['/admin']);
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        console.error('Error saving product:', error);
+        alert('Error: ' + (error.error?.message || 'Failed to save product'));
       }
 
-      this.selectedSubImages.forEach((file: File) => {
-        formData.append('subImages', file);
-      });
-
-      const request = this.isEditMode 
-        ? this.productService.updateProduct(this.productId!, formData)
-        : this.productService.createProduct(formData);
-
-      request.subscribe({
-        next: (response: any) => {
-          this.isLoading = false;
-          console.log('Product saved successfully:', response);
-          this.router.navigate(['/admin/dashboard']);
-        },
-        error: (error: any) => {
-          this.isLoading = false;
-          console.error('Error saving product:', error);
-          alert('Failed to save product. Please try again.');
-        }
-      });
-    }
+    });
   }
+
 
   goBack() {
     this.router.navigate(['/admin/dashboard']);
