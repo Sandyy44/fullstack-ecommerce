@@ -130,12 +130,12 @@ export const signup = asyncHandler(async (req, res, next) => {
     return next(new Error("Email exist", { cause: 409 }));
   }
   const token = generateToken({
-    payload: { email, id: user._id, role: user.role  },
+    payload: { email },
     signature: process.env.EMAILTOKEN,
     expiresIn: 60 * 5,
   });
   const refreshToken = generateToken({
-    payload: { email,id: user._id, role: user.role  },
+    payload: { email },
     signature: process.env.EMAILTOKEN,
     expiresIn: 60 * 60 * 24,
   });
