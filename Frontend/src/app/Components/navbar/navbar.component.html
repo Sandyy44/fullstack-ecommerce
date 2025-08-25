@@ -3,14 +3,17 @@
   <ul class="nav-links">
     <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
     <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
-    <ng-container [(ngModel)]="token">
+    <ng-container>
 
       @if(token){
+
+      <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
+      @if(userRole === 'Admin'){
+      <li><a routerLink="/admin/dashboard" routerLinkActive="active">Admin Dashboard</a></li>
+      }
+      @else{
       <li><a routerLink="/cart" routerLinkActive="active">Cart</a></li>
       <li><a routerLink="/orders" routerLinkActive="active">Orders</a></li>
-      <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
-      @if(userRole === 'admin'){
-      <li><a routerLink="/admin/dashboard" routerLinkActive="active">Admin Dashboard</a></li>
       }
       <li><a (click)="onLogout($event)">Logout</a></li>
 

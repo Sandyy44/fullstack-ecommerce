@@ -1,7 +1,14 @@
 <div class="profile-container">
   <div class="profile-header">
     <div class="profile-image">
-      <img [src]="user.image?.secure_url || 'assets/default-avatar.png'" alt="Profile Picture" class="avatar">
+      @if(!user.image?.secure_url) {
+      <img src='assets/default-avatar.jpg' alt="Profile Picture" class="avatar">
+
+      }
+      @else {
+      <img [src]="'http://localhost:5000' + user.image?.secure_url" alt="Profile Picture" class="avatar">
+
+      }
       <button class="edit-image-btn" (click)="editProfilePicture()">
         <i class="fas fa-camera"></i>
       </button>
@@ -38,11 +45,11 @@
         </div>
         <div class="info-item">
           <label>Date of Birth:</label>
-          <span>{{user.DOB | date:'mediumDate' || 'Not provided'}}</span>
+          <span>{{ user.DOB ? (user.DOB | date:'mediumDate') : 'Not provided' }}</span>
         </div>
         <div class="info-item">
           <label>Age:</label>
-          <span>{{user.age || 'Not provided'}}</span>
+          <span>{{ user.DOB ? age : 'Not provided' }}</span>
         </div>
       </div>
     </div>
@@ -72,7 +79,7 @@
         <button class="action-btn primary" (click)="changePassword()">
           <i class="fas fa-lock"></i> Change Password
         </button>
-        <button class="action-btn secondary" (click)="deleteProfilePicture()" *ngIf="user.image">
+        <button class="action-btn secondary" (click)="deleteProfilePicture()" *ngIf="user.image?.secure_url">
           <i class="fas fa-trash"></i> Remove Profile Picture
         </button>
       </div>
@@ -99,9 +106,13 @@
       <div class="form-group">
         <label>Gender:</label>
         <select formControlName="gender" class="form-control">
-          <option value="">Select Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+          <option [value]="user.gender">{{user.gender}}</option>
+          @if(user.gender === 'Male') {
+          <option value="Female">Female</option>
+          }
+          @else {
+          <option value="Male">Male</option>
+          }
         </select>
       </div>
       <div class="form-group">
@@ -126,7 +137,8 @@
     <form [formGroup]="addressForm" (ngSubmit)="updateAddress()">
       <div class="form-group">
         <label>Address:</label>
-        <textarea formControlName="address" class="form-control" rows="3" placeholder="Enter your full address"></textarea>
+        <textarea formControlName="address" class="form-control" rows="3"
+          placeholder="Enter your full address"></textarea>
       </div>
       <div class="modal-actions">
         <button type="button" class="btn secondary" (click)="closeAddressModal()">Cancel</button>
@@ -147,20 +159,40 @@
       <div class="form-group">
         <label>Current Password:</label>
         <input type="password" formControlName="currentPassword" class="form-control">
+        @if(passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.errors?.['required']) {
+        <span class="text-danger">Current password is required.</span>
+        }
       </div>
       <div class="form-group">
         <label>New Password:</label>
         <input type="password" formControlName="password" class="form-control">
+        @if(passwordForm.get('password')?.touched && passwordForm.get('password')?.errors?.['required']) {
+        <span class="text-danger">Password is required.</span>
+        }
+        @if(passwordForm.get('password')?.touched && passwordForm.get('password')?.errors?.['pattern']) {
+        <span class="text-danger">Password must be at least 8 characters long and include at least one uppercase
+          letter.</span>
+        }
       </div>
       <div class="form-group">
         <label>Confirm New Password:</label>
         <input type="password" formControlName="cPassword" class="form-control">
+        @if(passwordForm.get('cPassword')?.touched && passwordForm.get('cPassword')?.errors?.['required']) {
+        <span class="text-danger">Confirming password is required.</span>
+        }
+        @if(passwordForm.get('cPassword')?.touched && passwordForm.get('cPassword')?.value !==
+        passwordForm.get('password')?.value) {
+        <span class="text-danger">Passwords do not match.</span>
+        }
       </div>
+      @if(errorMessage) {
+      <span class="text-danger">Current password is wrong. Please try Again</span>
+      }
       <div class="modal-actions">
+
         <button type="button" class="btn secondary" (click)="closePasswordModal()">Cancel</button>
         <button type="submit" class="btn primary" [disabled]="!passwordForm.valid">Change Password</button>
       </div>
     </form>
   </div>
 </div>
-

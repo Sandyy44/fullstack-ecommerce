@@ -11,37 +11,21 @@ let URL: string = "http://localhost:5000"
 export class CartService {
 
   constructor(private httpClient: HttpClient) { }
-  getCartData(token: string): Observable<ICartRes> {
-    return this.httpClient.get<ICartRes>(`${URL}/cart`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+  getCartData(): Observable<ICartRes> {
+    return this.httpClient.get<ICartRes>(`${URL}/cart`)
   }
 
 
-  deleteItemFromCart(token: string, id: string): Observable<ICartRes> {
-    return this.httpClient.delete<ICartRes>(`${URL}/cart/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+  deleteItemFromCart( id: string): Observable<ICartRes> {
+    return this.httpClient.delete<ICartRes>(`${URL}/cart/${id}`)
   }
 
-  clearCart(token: string): Observable<ICartRes> {
-    return this.httpClient.delete<ICartRes>(`${URL}/cart`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+  clearCart(): Observable<ICartRes> {
+    return this.httpClient.delete<ICartRes>(`${URL}/cart`)
   }
 
-  addToCart(token: string, body: ICartQuantity, id: string): Observable<ICartRes> {
-    return this.httpClient.post<ICartRes>(`${URL}/product/${id}/cart`, body, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+  addToCart( body: ICartQuantity, id: string): Observable<ICartRes> {
+    return this.httpClient.post<ICartRes>(`${URL}/product/${id}/cart`, body)
   }
 
 }

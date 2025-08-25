@@ -28,9 +28,13 @@ export const profilePic = asyncHandler(async (req, res, next) => {
     user.image.public_id = null
     user.image.secure_url = null
   }
+  if (req.file) {
+    user.image = {
+      secure_url: `/uploads/user/profileImage/${req.file.filename}`,
+      public_id: req.file.filename
+    };
+  }
 
-  user.image.secure_url = req.file.finalDest
-  user.image.public_id = req.file.path
 
   await user.save();
   return res.status(200).json({ message: "Done" });
@@ -81,12 +85,12 @@ export const updateUser = asyncHandler(async (req, res, next) => {
       return next(new Error("Email exist", { cause: 409 }));
     }
     const token = generateToken({
-      payload: { email },
+      payload: { email ,id: user._id, role: user.role },
       signature: process.env.EMAILTOKEN,
       expiresIn: 60 * 5,
     });
     const refreshToken = generateToken({
-      payload: { email },
+      payload: { email,id: user._id, role: user.role  },
       signature: process.env.EMAILTOKEN,
       expiresIn: 60 * 60 * 24,
     });
@@ -204,13 +208,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
   }
   if (phone) {
     const decryptedPhone = decrypt({ encryptedText: user.phone });
-    if (decryptedPhone == phone) {
-      return next(
-        new Error("You cannot update your phone by the same phone", {
-          cause: 400,
-        })
-      );
-    }
+
     const encryptedPhone = encrypt({ plainText: phone });
     req.body.phone = encryptedPhone;
   }
@@ -228,6 +226,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
   const { _id } = req.user;
   const user = await findById({ model: userModel, condition: _id });
   const { oldPassword, password } = req.body;
+  console.log(oldPassword, password);
   const match = compare({ plaintext: oldPassword, hashValue: user.password });
   if (!match) {
     return next(new Error("this password is wrong", { cause: 400 }));

@@ -12,27 +12,15 @@ export class OrderService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getOrders(token: string): Observable<IOrdersRes> {
-    return this.httpClient.get<IOrdersRes>(`${URL}/order`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+  getOrders(): Observable<IOrdersRes> {
+    return this.httpClient.get<IOrdersRes>(`${URL}/order`)
   }
 
-  createOrder(token: string, body: IOrder): Observable<IOrderRes> {
-    return this.httpClient.post<IOrderRes>(`${URL}/order`, body, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+  createOrder(body: IOrder): Observable<IOrderRes> {
+    return this.httpClient.post<IOrderRes>(`${URL}/order`, body)
   }
-  cancelOrder(token: string, id: string): Observable<IOrderMessageRes> {
-    return this.httpClient.patch<IOrderMessageRes>(`${URL}/order/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+  cancelOrder( id: string): Observable<IOrderMessageRes> {
+    return this.httpClient.patch<IOrderMessageRes>(`${URL}/order/${id}`,{})
   }
 
 }

@@ -28,12 +28,13 @@ const userSchema = new Schema(
     role: {
       type: String,
       default: "User",
-      enum: ["User", "Admin", "admin"],
+      enum: ["User", "Admin"],
     },
     accountType: {
       type: String,
       default: "normal",
     },
+    refresh_token: String,
     socialId: String,
     gender: { type: String ,default:"Male",enum:["Male","Female"]},
     DOB: Date,
@@ -47,6 +48,14 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    image: {
+      type: {
+        secure_url: String,
+        public_id: String
+      },
+      required: false
+    },
+    
     deleted: {
       type: Boolean,
       default: false,

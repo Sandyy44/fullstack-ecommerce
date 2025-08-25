@@ -41,7 +41,7 @@ export const updatePassword = joi
   .object({
     oldPassword: generalFields.password,
     password: generalFields.password,
-    cPassword: generalFields.cPassword.valid(joi.ref("password")),
+    cPassword: generalFields.cPassword,
     authorization: generalFields.headers,
   })
   .required()

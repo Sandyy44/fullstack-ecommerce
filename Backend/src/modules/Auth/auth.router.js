@@ -53,4 +53,7 @@ router.patch(
   validation(validators.forgetPassword),
   authController.forgetPassword
 );
+
+router.post('/refresh',authController.refreshToken )
+
 export default router;

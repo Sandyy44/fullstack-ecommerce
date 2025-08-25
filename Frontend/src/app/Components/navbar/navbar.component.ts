@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
     // Initial token and role
     this.token = this.authService.getAccessToken();
     this.userRole = this.authService.getUserRole();
+    console.log("User Role:", this.userRole);
 
     // Update token and role on every navigation
     this.router.events

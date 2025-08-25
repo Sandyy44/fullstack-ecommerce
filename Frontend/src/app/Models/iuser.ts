@@ -4,6 +4,7 @@ export interface IUser {
   email?: string
   password?: string
   cPassword?:string
+  oldPassword?:string
   phone?: string
   address?: string
   role?: string
@@ -18,4 +19,5 @@ export interface IUser {
   code?: number
   image?: { secure_url: string, public_id: string }
   wishList?:string[] 
+  refresh_token?:string
 }

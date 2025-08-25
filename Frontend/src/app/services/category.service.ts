@@ -15,36 +15,20 @@ export class CategoryService {
     getAllCategories(): Observable<ICategoriesRes> {
       return this.httpClient.get<ICategoriesRes>(`${URL}/category`, )
     }
-      getCategoryById(token: string,id:string): Observable<ICategoryRes> {
-      return this.httpClient.get<ICategoryRes>(`${URL}/category/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      getCategoryById(id:string): Observable<ICategoryRes> {
+      return this.httpClient.get<ICategoryRes>(`${URL}/category/${id}`)
     }
   
-    deleteCategory(token: string, id: string): Observable<ICategoryMessRes> {
-      return this.httpClient.delete<ICategoryMessRes>(`${URL}/category/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+    deleteCategory( id: string): Observable<ICategoryMessRes> {
+      return this.httpClient.delete<ICategoryMessRes>(`${URL}/category/${id}`)
     }
   
-    updateCategory(token: string,id:string): Observable<ICategoryRes> {
-      return this.httpClient.patch<ICategoryRes>(`${URL}/category/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+    updateCategory(body: ICategory,id:string): Observable<ICategoryRes> {
+      return this.httpClient.patch<ICategoryRes>(`${URL}/category/${id}`, body)
     }
   
-    addCategory(token: string, body: ICategory, id: string): Observable<ICategoryRes> {
-      return this.httpClient.post<ICategoryRes>(`${URL}/product/${id}/cart`, body, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+    addCategory( body: ICategory, id: string): Observable<ICategoryRes> {
+      return this.httpClient.post<ICategoryRes>(`${URL}/product/${id}/cart`, body)
     }
   
 }

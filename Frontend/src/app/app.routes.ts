@@ -12,12 +12,14 @@ import { AdminDashboardComponent } from './Components/admin-dashboard/admin-dash
 import { CreateProductComponent } from './Components/create-product/create-product.component';
 import { authGuard } from './Guards/auth.guard';
 import { adminGuard } from './Guards/admin.guard';
+import { VerifyResetComponent } from './Components/verify-reset/verify-reset.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forget-password', component: ForgetPasswordComponent },
+  { path: 'verify-reset', component: VerifyResetComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'product/:id', component: ProductDetailsComponent, canActivate: [authGuard] },
   { path: 'cart', component: CartComponent, canActivate: [authGuard] },

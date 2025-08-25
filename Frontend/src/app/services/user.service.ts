@@ -29,8 +29,10 @@ export class UserService {
     return this.httpClient.put<IUserMessageRes>(`${URL}/user`, body);
   }
 
-  editProfilePic(body: IUser): Observable<IUserMessageRes> {
-    return this.httpClient.patch<IUserMessageRes>(`${URL}/user/profilePic`, body);
+  editProfilePic(file: File): Observable<IUserMessageRes> {
+    const formData = new FormData();
+    formData.append("image", file);
+    return this.httpClient.patch<IUserMessageRes>(`${URL}/user/profilePic`, formData);
   }
 
   deleteProfilePic(): Observable<IUserMessageRes> {
@@ -41,19 +43,9 @@ export class UserService {
     return this.httpClient.patch<IUserMessageRes>(`${URL}/user/updatePassword`, body);
   }
 
-  sendForgetPasswordCode(email: string): Observable<IUserMessageRes> {
-    return this.httpClient.post<IUserMessageRes>(`${URL}/auth/sendCode`, { email });
-  }
 
-  resetPassword(email: string, code: string, password: string): Observable<IUserMessageRes> {
-    return this.httpClient.post<IUserMessageRes>(`${URL}/auth/forgetPassword`, { email, code, password });
-  }
 
-  uploadProfilePic(formData: FormData): Observable<IUserMessageRes> {
-    const token = localStorage.getItem('token');
-    const headers = {
-      'Authorization': `Bearer ${token}`
-    };
-    return this.httpClient.patch<IUserMessageRes>(`${URL}/user/profilePic`, formData, { headers });
-  }
+ 
+
+
 }

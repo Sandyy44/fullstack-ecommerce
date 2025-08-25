@@ -11,3 +11,7 @@ export interface IUsersRes{
 export interface IUserMessageRes{
   message:string
 }
+export interface IToken{
+
+token:string
+}

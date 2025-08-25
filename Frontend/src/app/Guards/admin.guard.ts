@@ -14,7 +14,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
 
   // Check if user is admin
   const userRole = authService.getUserRole();
-  if (userRole !== 'admin') {
+  if (userRole !== 'Admin') {
     router.navigate(['/']);
     return false;
   }

@@ -2,7 +2,7 @@ export interface IAuthSignin{
 message:string;
 token:string;
 refresh_token:string;
-role:string;
+role?:string;
 }
 export interface IAuthSignup{
 message:string;

@@ -22,7 +22,7 @@ export class RegisterComponent {
   constructor(private router: Router, private authService: AuthService) {
 
     this.userRegisterForm = new FormGroup({
-      userName: new FormControl('', [Validators.required, Validators.pattern(/^[a-z]{3,20}$/)]),
+      userName: new FormControl('', [Validators.required, Validators.pattern(/^[a-z0-9]{3,20}$/)]),
       email: new FormControl('', [Validators.required, Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)]),
       phone: new FormControl('', [Validators.required, Validators.pattern(/^\d{11}$/)]),
       gender: new FormControl('', [Validators.required]),

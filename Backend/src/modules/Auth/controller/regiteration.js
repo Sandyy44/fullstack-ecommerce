@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { customAlphabet } from "nanoid";
 import sendEmail from "../../../utils/sendEmail.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
+import { promisify } from "util";
 import {
   create,
   findOne,
@@ -23,7 +24,7 @@ export const views = asyncHandler(async (req, res, next) => {
 });
 export const googleCallback = asyncHandler(async (req, res, next) => {
   console.log(req.user);
-  
+
   const { provider, displayName, email_verified, email, id } = req.user;
   if (!email_verified) {
     return next(new Error("In-valid google account", { cause: 400 }));
@@ -42,7 +43,7 @@ export const googleCallback = asyncHandler(async (req, res, next) => {
       },
     });
     const token = generateToken({
-      payload: { id: user._id },
+      payload: { id: user._id, role: user.role },
       expiresIn: 60 * 60 * 24,
     });
     return res
@@ -65,7 +66,7 @@ export const googleCallback = asyncHandler(async (req, res, next) => {
       data: { active: true },
     });
     const token = generateToken({
-      payload: { id: user._id },
+      payload: { id: user._id, role: user.role },
       expiresIn: 60 * 60 * 24,
     });
     return res
@@ -77,45 +78,45 @@ export const facebookCallback = asyncHandler(async (req, res, next) => {
   return res.status(200).json({ message: "Done", user: req.user });
 });
 export const githubCallback = asyncHandler(
-    async (req, res, next) => {
-  const { provider, displayName, id } = req.user;
-  const user = await findOne({ model: userModel, condition: { socialId: id } });
-  if (!user) {
-    const user = await create({
-      model: userModel,
-      data: {
-        userName: displayName,
-        accountType: provider,
-        socialId: id,
-        confirmEmail: true,
-        active: true,
-      },
-    });
-    const token = generateToken({
-      payload: { id: user._id },
-      expiresIn: 60 * 60 * 24,
-    });
-    return res
-      .status(201)
-      .json({ message: "Done", socialType: "Register", token });
-  } else {
-    if (user.blocked) {
-      return next(new Error("your account is blocked", { cause: 400 }));
+  async (req, res, next) => {
+    const { provider, displayName, id } = req.user;
+    const user = await findOne({ model: userModel, condition: { socialId: id } });
+    if (!user) {
+      const user = await create({
+        model: userModel,
+        data: {
+          userName: displayName,
+          accountType: provider,
+          socialId: id,
+          confirmEmail: true,
+          active: true,
+        },
+      });
+      const token = generateToken({
+        payload: { id: user._id, role: user.role },
+        expiresIn: 60 * 60 * 24,
+      });
+      return res
+        .status(201)
+        .json({ message: "Done", socialType: "Register", token });
+    } else {
+      if (user.blocked) {
+        return next(new Error("your account is blocked", { cause: 400 }));
+      }
+      await updateOne({
+        model: userModel,
+        condition: { _id: user._id },
+        data: { active: true },
+      });
+      const token = generateToken({
+        payload: { id: user._id, role: user.role },
+        expiresIn: 60 * 60 * 24,
+      });
+      return res
+        .status(200)
+        .json({ message: "Done", socialType: "Login", token });
     }
-    await updateOne({
-      model: userModel,
-      condition: { _id: user._id },
-      data: { active: true },
-    });
-    const token = generateToken({
-      payload: { id: user._id },
-      expiresIn: 60 * 60 * 24,
-    });
-    return res
-      .status(200)
-      .json({ message: "Done", socialType: "Login", token });
   }
-}
 );
 export const signup = asyncHandler(async (req, res, next) => {
   const { userName, password, phone, gender, address, role, DOB } = req.body;
@@ -129,12 +130,12 @@ export const signup = asyncHandler(async (req, res, next) => {
     return next(new Error("Email exist", { cause: 409 }));
   }
   const token = generateToken({
-    payload: { email },
+    payload: { email, id: user._id, role: user.role  },
     signature: process.env.EMAILTOKEN,
     expiresIn: 60 * 5,
   });
   const refreshToken = generateToken({
-    payload: { email },
+    payload: { email,id: user._id, role: user.role  },
     signature: process.env.EMAILTOKEN,
     expiresIn: 60 * 60 * 24,
   });
@@ -248,7 +249,7 @@ export const signup = asyncHandler(async (req, res, next) => {
     return next(new Error("Email rejected", { cause: 400 }));
   }
   const hashPassword = hash({ plaintext: password });
-  const encryptedPhone = encrypt({ plainText:phone });
+  const encryptedPhone = encrypt({ plainText: phone });
   const newUser = await create({
     model: userModel,
     data: {
@@ -294,7 +295,7 @@ export const refreshEmail = asyncHandler(async (req, res, next) => {
     return next(new Error("Already confirmed", { cause: 400 }));
   }
   const newToken = generateToken({
-    payload: { email: decoded.email },
+    payload: { email: decoded.email ,id: user._id, role: user.role },
     signature: process.env.EMAILTOKEN,
     expiresIn: 60 * 2,
   });
@@ -426,13 +427,15 @@ export const signin = asyncHandler(async (req, res, next) => {
     return next(new Error("Password is wrong", { cause: 400 }));
   }
   const token = generateToken({
-    payload: { id: user._id },
+    payload: { id: user._id, role: user.role },
     expiresIn: 60 * 60 * 24,
   });
   const refresh_token = generateToken({
-    payload: { id: user._id },
+    payload: { id: user._id, role: user.role },
     expiresIn: 60 * 60 * 24 * 365,
   });
+  const updatedUser = await userModel.findByIdAndUpdate(user._id, { $set: { refresh_token } }, { new: true })
+  console.log(updatedUser)
   user.status = "online";
   await user.save();
   return res.status(200).json({ message: "Done", token, refresh_token, role: user.role });
@@ -482,13 +485,36 @@ export const forgetPassword = asyncHandler(async (req, res, next) => {
   user.changeTime = Date.now();
   await user.save();
   const token = generateToken({
-    payload: { id: user._id },
+    payload: { id: user._id, role: user.role },
     expiresIn: 60 * 60 * 24,
   });
   const refresh_token = generateToken({
-    payload: { id: user._id },
+    payload: { id: user._id, role: user.role },
     expiresIn: 60 * 60 * 24 * 365,
   });
+  const updatedUser = await userModel.findByIdAndUpdate(user._id, { $set: { refresh_token } }, { new: true })
+  console.log(updatedUser)
   return res.status(200).json({ message: "Done", token, refresh_token });
 });
 
+
+export const refreshToken = asyncHandler(async (req, res, next) => {
+
+  const { refresh_token } = req.body;
+
+  try {
+    let payload = await promisify(jwt.verify)(refresh_token, process.env.TOKINSEGNITURE)
+    if (!payload) return res.status(401).json({ message: "unauthorized" })
+
+    let user = await userModel.findOne({ _id: payload.id })
+    if (!user || user.refresh_token != refresh_token) return res.status(401).json({ message: "unauthorized" })//invalid token
+    let token = jwt.sign({ id: user._id }, process.env.TOKINSEGNITURE, { expiresIn: '11h' })
+    res.status(200).json({ token })
+
+
+  } catch (error) {
+    console.log(error)
+    return res.status(403).json({ message: "forbidden" })
+  }
+
+});

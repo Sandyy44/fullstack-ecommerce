@@ -8,16 +8,19 @@ import { IUser } from '../../Models/iuser';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit {
   user!: IUser;
   personalInfoForm!: FormGroup;
   addressForm!: FormGroup;
   passwordForm!: FormGroup;
-  
+  birthdate = new Date();
+  age: number = 0
+  errorMessage: string = '';
+
   showPersonalInfoModal = false;
   showAddressModal = false;
   showPasswordModal = false;
@@ -47,7 +50,7 @@ export class ProfileComponent implements OnInit{
 
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z]).{8,}$/)]],
       cPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
@@ -55,7 +58,7 @@ export class ProfileComponent implements OnInit{
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('cPassword');
-    return password && confirmPassword && password.value === confirmPassword.value 
+    return password && confirmPassword && password.value === confirmPassword.value
       ? null : { passwordMismatch: true };
   }
 
@@ -63,6 +66,10 @@ export class ProfileComponent implements OnInit{
     this.userService.getProfile().subscribe(
       (data: IUserRes) => {
         this.user = data.user;
+        this.birthdate = new Date(this.user.DOB || '');
+        let timeDiff = Math.abs(Date.now() - this.birthdate.getTime());
+        this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+        console.log(this.age)
         this.populateForms();
       },
       error => {
@@ -165,17 +172,21 @@ export class ProfileComponent implements OnInit{
     if (this.passwordForm.valid) {
       const formData = this.passwordForm.value;
       const updateData: IUser = {
-        password: formData.currentPassword,
-        cPassword: formData.password
+        oldPassword: formData.currentPassword,
+        password: formData.password,
+        cPassword: formData.cPassword
       };
-
+      console.log(updateData)
       this.userService.updatePassword(updateData).subscribe(
         response => {
           console.log('Password updated successfully:', response);
+           alert('Password updated successfully!');
           this.closePasswordModal();
         },
         error => {
           console.error('Error updating password:', error);
+          this.errorMessage = error.error.errMass;
+
         }
       );
     }
@@ -188,13 +199,11 @@ export class ProfileComponent implements OnInit{
     input.onchange = (event: any) => {
       const file = event.target.files[0];
       if (file) {
-        const formData = new FormData();
-        formData.append('image', file);
-        
-        this.userService.uploadProfilePic(formData).subscribe({
+        console.log('Selected file:', file);
+
+        this.userService.editProfilePic(file).subscribe({
           next: (response: any) => {
             console.log('Profile picture uploaded successfully:', response);
-            alert('Profile picture uploaded successfully!');
             this.loadUserProfile(); // Reload user data to show new image
           },
           error: (error: any) => {
@@ -231,4 +240,6 @@ export class ProfileComponent implements OnInit{
       );
     }
   }
+
+
 }
